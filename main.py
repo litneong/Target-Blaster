@@ -6,6 +6,34 @@ pygame.init()
 
 #values
 if True:
+  #constants
+  if True:
+    TICK = 60
+    ANG = math.sqrt(2)
+    pi = math.pi
+    #colors
+    if True:
+      BLACK = (0,0,0)
+      WHITE = (255,255,255)
+      GRAY = (125,125,125)
+      LIGHTGRAY = (200,200,200)
+      DARKGRAY = (75,75,75)
+      RED = (255,0,0)
+      GREEN = (0,255,0)
+      BLUE = (0,0,255)
+      DARKBLUE = (0,0,100)
+      YELLOW = (255,255,0)
+      PURPLE = (175,0,200)
+      LILAC = (220,70,255)
+      ORANGE = (255,150,0)
+      SKYBLUE = (0,150,255)
+      BROWN = (120,70,0)
+      DARKGREEN = (0,200,0)
+      INVIS = (255,255,255,0)
+      PINK = (255,150,150)
+      MAROON = (100,0,0)
+      fadeblack = [10,10,10,0]
+      fadewhite = [255,255,255,0]
   #variables
   if True:
     #movement
@@ -27,9 +55,10 @@ if True:
       blts = []
       blt_mspd = 3
       blt_fspd = 10
+      hblts = [10,30,50,70]
       msl = 0
       msls = []
-      msl_mspd = 5
+      msl_mspd = 6
       msl_fspd = 1
       msl_rf = 1
       fire_timer_m = 0
@@ -54,46 +83,28 @@ if True:
       r = random.randint(0,100)
       r2 = random.randint(0,1000)
       t_x = random.randrange(15,585)
-      t_y = random.randrange(15,385)
+      t_y = random.randrange(15,380)
       targ_timer = 0
       do_targ_timer = False
       targ_timer_end = 0
+      t_type = "Red"
+      t_type2 = "n"
+      t_type2_f = "None"
     #misc.
     if True:
       o_p = False
       p_p = False
+      en_p = False
+      sp_p = False
       paused = -1
       pause_timer = 0
       done = False
       page = 1
       var_reset = False
-  #constants
-  if True:
-    TICK = 60
-    ANG = math.sqrt(2)
-    pi = math.pi
-    #colors
-    if True:
-      BLACK = (0,0,0)
-      WHITE = (255,255,255)
-      GRAY = (125,125,125)
-      LIGHTGRAY = (200,200,200)
-      DARKGRAY = (100,100,100)
-      RED = (255,0,0)
-      GREEN = (0,255,0)
-      BLUE = (0,0,255)
-      YELLOW = (255,255,0)
-      PURPLE = (175,0,200)
-      LILAC = (220,70,255)
-      ORANGE = (255,150,0)
-      SKYBLUE = (0,150,255)
-      BROWN = (150,100,0)
-      DARKGREEN = (0,200,0)
-      INVIS = (255,255,255,0)
-      PINK = (255,150,150)
-      MAROON = (100,0,0)
-      fadeblack = [10,10,10,0]
-      fadewhite = [255,255,255,0]
+      bclr = BLACK
+      hrttmr = 0
+      do_hrttmr = False
+      shake = 0
   #misc.
   if True:
     #game
@@ -106,7 +117,9 @@ if True:
         pygame.draw.circle(icon,WHITE,(15,15),10)
         pygame.draw.circle(icon,RED,(15,15),5)
         pygame.display.set_icon(icon)
-      screen = pygame.display.set_mode((600,400),pygame.SRCALPHA)
+      flags = pygame.SRCALPHA|pygame.RESIZABLE|pygame.SCALED
+      display = pygame.display.set_mode((600,400),flags)
+      screen = pygame.Surface([600,400],pygame.SRCALPHA)
       pygame.display.set_caption("Target Blaster")
       clock = pygame.time.Clock()
       pygame.event.set_blocked(pygame.MOUSEMOTION)
@@ -115,25 +128,30 @@ if True:
       dif = "med"
     #fonts
     if True:
-      tinyfont = pygame.font.SysFont("Comic Sans MS",20)
-      smallfont2 = pygame.font.SysFont("Comic Sans MS",22)
-      smallfont = pygame.font.SysFont("Comic Sans MS",30)
-      medsmlfont2 = pygame.font.SysFont("Comic Sans MS",40)
-      medsmlfont = pygame.font.SysFont("Comic Sans MS",45)
-      medfont = pygame.font.SysFont("Comic Sans MS",65)
-      medbigfont = pygame.font.SysFont("Comic Sans MS",80)
-      bigfont = pygame.font.SysFont("Comic Sans MS",100)
+      tinyfont = pygame.font.SysFont("freesansbold",20)
+      smallfont2 = pygame.font.SysFont("freesansbold",22)
+      smallfont = pygame.font.SysFont("freesansbold",30)
+      medsmlfont2 = pygame.font.SysFont("freesansbold",40)
+      medsmlfont = pygame.font.SysFont("freesansbold",45)
+      medfont = pygame.font.SysFont("freesansbold",65)
+      medbigfont = pygame.font.SysFont("freesansbold",80)
+      bigfont = pygame.font.SysFont("freesansbold",100)
     #surfaces/images
     if True:
       hud = pygame.Surface([600,400],pygame.SRCALPHA)
+      hud.set_alpha(230)
       gmovsurf = pygame.Surface([600,400],pygame.SRCALPHA)
       gmovsubsurf = bigfont.render("Game Over",True,RED)
-      resurf = medfont.render("Play again?",True,GRAY)
+      resurf = medsmlfont.render("Play again with these settings?",True,DARKGRAY)
       winsurf = pygame.Surface([600,400],pygame.SRCALPHA)
       winsubsurf = bigfont.render("You win!",True,YELLOW)
-      pausesurf = medfont.render("Paused",True,WHITE)
+      pausetxt = medfont.render("Paused",True,WHITE)
+      pausesurf = pygame.Surface([600,400],pygame.SRCALPHA)
+      pausesurf.fill([0,0,0,50])
       logo = bigfont.render("Target Blaster",True,RED)
       statsurf = pygame.Surface([400,400],pygame.SRCALPHA)
+      stattxt = smallfont.render("Press E to show stats",True,BLACK)
+      stattxt.set_alpha(150)
       instrtxt = medfont.render("Instructions",True,WHITE)
       keytxt = medfont.render("Target Key",True,WHITE)
       prmtxt = medsmlfont.render("Primary Color",True,WHITE)
@@ -239,7 +257,7 @@ if True:
         if True:
           rtdesc = pygame.Surface([100,250],pygame.SRCALPHA)
           rtdescsub1 = medsmlfont.render("Red",True,RED)
-          rtdescsub1_2 = smallfont2.render("60/50/40/22%",True,WHITE)
+          rtdescsub1_2 = smallfont2.render("60/50/43/32%",True,WHITE)
           rtdescsub2 = smallfont.render("Points: 2",True,WHITE)
           rtdescsub3 = smallfont.render("Time:",True,WHITE)
           rtdescsub3_2 = smallfont2.render("45/30/20/5s",True,WHITE)
@@ -252,18 +270,18 @@ if True:
           pygame.draw.circle(rtdesc,RED,(50,85),10)
           rtdesc.blit(rtdescsub2,(5,120))
           rtdesc.blit(rtdescsub3,(20,140))
-          rtdesc.blit(rtdescsub3_2,(10,162.5))
-          rtdesc.blit(spctxt,(10,180))
-          rtdesc.blit(rtdescsub4,(25,200))
+          rtdesc.blit(rtdescsub3_2,(10,160))
+          rtdesc.blit(spctxt,(10,175))
+          rtdesc.blit(rtdescsub4,(25,195))
           pygame.draw.line(rtdesc,BLACK,(99,0),(99,250))
         #purple
         if True:
           ptdesc = pygame.Surface([100,250],pygame.SRCALPHA)
           ptdescsub1 = medsmlfont.render("Purple",True,PURPLE)
-          ptdescsub1_2 = smallfont2.render("15/25/35/50%",True,WHITE)
+          ptdescsub1_2 = smallfont2.render("15/25/32/40%",True,WHITE)
           ptdescsub2 = smallfont.render("Points: -5",True,WHITE)
           ptdescsub3 = smallfont.render("Time:",True,WHITE)
-          ptdescsub3_2 = smallfont2.render("2/3.2/4/10s",True,WHITE)
+          ptdescsub3_2 = smallfont2.render("2/3.3/4/4.5s",True,WHITE)
           ptdescsub4 = smallfont.render("-1 Health",True,WHITE)
           ptdesc.fill(INVIS)
           ptdesc.blit(ptdescsub1,(1,0))
@@ -273,9 +291,9 @@ if True:
           pygame.draw.circle(ptdesc,PURPLE,(50,85),10)
           ptdesc.blit(ptdescsub2,(3,120))
           ptdesc.blit(ptdescsub3,(20,140))
-          ptdesc.blit(ptdescsub3_2,(10,162.5))
-          ptdesc.blit(spctxt,(10,180))
-          ptdesc.blit(ptdescsub4,(4,200))
+          ptdesc.blit(ptdescsub3_2,(2,160))
+          ptdesc.blit(spctxt,(10,175))
+          ptdesc.blit(ptdescsub4,(4,195))
           pygame.draw.line(ptdesc,BLACK,(99,0),(99,250))
         #orange
         if True:
@@ -295,10 +313,10 @@ if True:
           pygame.draw.circle(otdesc,ORANGE,(50,85),10)
           otdesc.blit(otdescsub2,(5,120))
           otdesc.blit(otdescsub3,(20,140))
-          otdesc.blit(otdescsub3_2,(10,162.5))
-          otdesc.blit(spctxt,(10,180))
-          otdesc.blit(otdescsub4,(5,200))
-          otdesc.blit(otdescsub5,(10,220))
+          otdesc.blit(otdescsub3_2,(10,160))
+          otdesc.blit(spctxt,(10,175))
+          otdesc.blit(otdescsub4,(5,195))
+          otdesc.blit(otdescsub5,(10,215))
           pygame.draw.line(otdesc,BLACK,(99,0),(99,250))
         #green
         if True:
@@ -318,10 +336,10 @@ if True:
           pygame.draw.circle(gtdesc,DARKGREEN,(50,85),10)
           gtdesc.blit(gtdescsub2,(5,120))
           gtdesc.blit(gtdescsub3,(20,140))
-          gtdesc.blit(gtdescsub3_2,(10,162.5))
-          gtdesc.blit(spctxt,(10,180))
-          gtdesc.blit(gtdescsub4,(17,200))
-          gtdesc.blit(gtdescsub5,(8,220))
+          gtdesc.blit(gtdescsub3_2,(10,160))
+          gtdesc.blit(spctxt,(10,175))
+          gtdesc.blit(gtdescsub4,(17,195))
+          gtdesc.blit(gtdescsub5,(8,215))
           pygame.draw.line(gtdesc,BLACK,(99,0),(99,250))
         #black
         if True:
@@ -330,7 +348,7 @@ if True:
           btdescsub1_2 = smallfont2.render("2/5/10/20%",True,WHITE)
           btdescsub2 = smallfont.render("Points: -5",True,WHITE)
           btdescsub3 = smallfont.render("Time:",True,WHITE)
-          btdescsub3_2 = smallfont2.render("2/3/3.9/9.5s",True,WHITE)
+          btdescsub3_2 = smallfont2.render("2/3/3.4/4s",True,WHITE)
           btdescsub4 = smallfont.render("+5 walls",True,WHITE)
           btdesc.fill(INVIS)
           btdesc.blit(btdescsub1,(7,0))
@@ -340,20 +358,21 @@ if True:
           pygame.draw.circle(btdesc,BLACK,(50,85),10)
           btdesc.blit(btdescsub2,(3,120))
           btdesc.blit(btdescsub3,(20,140))
-          btdesc.blit(btdescsub3_2,(10,162.5))
-          btdesc.blit(spctxt,(10,180))
-          btdesc.blit(btdescsub4,(10,200))
+          btdesc.blit(btdescsub3_2,(12,160))
+          btdesc.blit(spctxt,(10,175))
+          btdesc.blit(btdescsub4,(9,195))
           pygame.draw.line(btdesc,BLACK,(99,0),(99,250))
         #yellow
         if True:
-          ytdesc = pygame.Surface([100,250],pygame.SRCALPHA)
+          ytdesc = pygame.Surface([100,270],pygame.SRCALPHA)
           ytdescsub1 = medsmlfont.render("Yellow",True,YELLOW)
           ytdescsub1_2 = smallfont2.render("8/5/3/1%",True,WHITE)
           ytdescsub2 = smallfont.render("Points: 10",True,WHITE)
           ytdescsub3 = smallfont.render("Time:",True,WHITE)
-          ytdescsub3_2 = smallfont2.render("5/3.5/2.5/1s",True,WHITE)
-          ytdescsub4 = smallfont.render("+1 Max",True,WHITE)
-          ytdescsub5 = smallfont.render("Health",True,WHITE)
+          ytdescsub3_2 = smallfont2.render("7/3.5/2.5/1.5s",True,WHITE)
+          ytdescsub4 = smallfont.render("+1 Health",True,WHITE)
+          ytdescsub5 = smallfont.render("and Max",True,WHITE)
+          ytdescsub6 = smallfont.render("Health",True,WHITE)
           ytdesc.fill(INVIS)
           ytdesc.blit(ytdescsub1,(2,0))
           ytdesc.blit(ytdescsub1_2,(25,35))
@@ -362,10 +381,11 @@ if True:
           pygame.draw.circle(ytdesc,YELLOW,(50,85),10)
           ytdesc.blit(ytdescsub2,(1,120))
           ytdesc.blit(ytdescsub3,(20,140))
-          ytdesc.blit(ytdescsub3_2,(10,162.5))
-          ytdesc.blit(spctxt,(10,180))
-          ytdesc.blit(ytdescsub4,(13,200))
-          ytdesc.blit(ytdescsub5,(20,220))
+          ytdesc.blit(ytdescsub3_2,(1,160))
+          ytdesc.blit(spctxt,(10,175))
+          ytdesc.blit(ytdescsub4,(3,195))
+          ytdesc.blit(ytdescsub5,(10,215))
+          ytdesc.blit(ytdescsub6,(20,235))
         #health
         if True:
           htdesc = pygame.Surface([120,250],pygame.SRCALPHA)
@@ -386,35 +406,35 @@ if True:
           htdesc.blit(htdescsub5,(2,195))
           htdesc.blit(htdescsub6,(3,215))
           pygame.draw.line(htdesc,BLACK,(119,0),(119,250))
-        #health2
+        #damage
         if True:
-          h2tdesc = pygame.Surface([120,250],pygame.SRCALPHA)
-          h2tdescsub1 = medsmlfont.render("Light",True,LILAC)
-          h2tdescsub1_2 = medsmlfont.render("Purple",True,LILAC)
-          h2tdescsub2 = medsmlfont.render("Health2",True,WHITE)
-          h2tdescsub3 = smallfont2.render("12/20/30/50%",True,WHITE)
-          h2tdescsub4 = smallfont.render("Health -1",True,WHITE)
-          h2tdescsub5 = smallfont.render("(must be on",True,WHITE)
-          h2tdescsub6 = smallfont2.render("purple primary)",True,WHITE)
-          h2tdesc.fill(INVIS)
-          h2tdesc.blit(h2tdescsub1,(22,0))
-          h2tdesc.blit(h2tdescsub1_2,(11,30))
-          h2tdesc.blit(h2tdescsub2,(0,60))
-          h2tdesc.blit(h2tdescsub3,(15,90))
-          pygame.draw.circle(h2tdesc,PURPLE,(60,140),30)
-          pygame.draw.circle(h2tdesc,LILAC,(60,140),20)
-          pygame.draw.circle(h2tdesc,PURPLE,(60,140),10)
-          h2tdesc.blit(h2tdescsub4,(15,175))
-          h2tdesc.blit(h2tdescsub5,(2,195))
-          h2tdesc.blit(h2tdescsub6,(3,215))
-          pygame.draw.line(h2tdesc,BLACK,(119,0),(119,250))
+          dtdesc = pygame.Surface([120,270],pygame.SRCALPHA)
+          dtdescsub1 = medsmlfont.render("Light",True,LILAC)
+          dtdescsub1_2 = medsmlfont.render("Purple",True,LILAC)
+          dtdescsub2 = medsmlfont.render("Damage",True,WHITE)
+          dtdescsub3 = smallfont2.render("2/5/10/20%",True,WHITE)
+          dtdescsub4 = smallfont.render("Health -1",True,WHITE)
+          dtdescsub5 = smallfont.render("(must be on",True,WHITE)
+          dtdescsub6 = smallfont2.render("purple primary)",True,WHITE)
+          dtdesc.fill(INVIS)
+          dtdesc.blit(dtdescsub1,(22,0))
+          dtdesc.blit(dtdescsub1_2,(11,30))
+          dtdesc.blit(dtdescsub2,(0,60))
+          dtdesc.blit(dtdescsub3,(22,90))
+          pygame.draw.circle(dtdesc,PURPLE,(60,140),30)
+          pygame.draw.circle(dtdesc,LILAC,(60,140),20)
+          pygame.draw.circle(dtdesc,PURPLE,(60,140),10)
+          dtdesc.blit(dtdescsub4,(15,175))
+          dtdesc.blit(dtdescsub5,(2,195))
+          dtdesc.blit(dtdescsub6,(3,215))
+          pygame.draw.line(dtdesc,BLACK,(119,0),(119,250))
         #missle
         if True:
           mtdesc = pygame.Surface([120,250],pygame.SRCALPHA)
           mtdescsub1 = medsmlfont.render("Light",True,LIGHTGRAY)
           mtdescsub1_2 = medsmlfont.render("Gray",True,LIGHTGRAY)
           mtdescsub2 = medsmlfont.render("Missile",True,WHITE)
-          mtdescsub3 = smallfont2.render("25/15/8/2%",True,WHITE)
+          mtdescsub3 = smallfont2.render("25/15/10/5%",True,WHITE)
           mtdescsub4 = smallfont.render("Missile",True,WHITE)
           mtdescsub5 = smallfont.render("count +",True,WHITE)
           mtdescsub6 = smallfont.render("refill rate",True,WHITE)
@@ -422,7 +442,7 @@ if True:
           mtdesc.blit(mtdescsub1,(22,0))
           mtdesc.blit(mtdescsub1_2,(25,30))
           mtdesc.blit(mtdescsub2,(6,60))
-          mtdesc.blit(mtdescsub3,(20,90))
+          mtdesc.blit(mtdescsub3,(17,90))
           pygame.draw.circle(mtdesc,RED,(60,140),30)
           pygame.draw.circle(mtdesc,LIGHTGRAY,(60,140),20)
           pygame.draw.circle(mtdesc,RED,(60,140),10)
@@ -433,9 +453,9 @@ if True:
         #missle2
         if True:
           m2tdesc = pygame.Surface([120,250],pygame.SRCALPHA)
-          m2tdescsub1 = medsmlfont.render("Gray",True,DARKGRAY)
+          m2tdescsub1 = medsmlfont.render("Gray",True,GRAY)
           m2tdescsub2 = medsmlfont.render("Missile2",True,WHITE)
-          m2tdescsub3 = smallfont2.render("5/2/1/0.1%",True,WHITE)
+          m2tdescsub3 = smallfont2.render("5/2/1/0.5%",True,WHITE)
           m2tdescsub4 = smallfont.render("Missile",True,WHITE)
           m2tdescsub5 = smallfont.render("Refill Rate",True,WHITE)
           m2tdescsub6 = smallfont.render("+1",True,WHITE)
@@ -454,27 +474,63 @@ if True:
         if True:
           ntdesc = pygame.Surface([120,250],pygame.SRCALPHA)
           ntdescsub1 = medsmlfont.render("White",True,WHITE)
-          ntdescsub2 = medsmlfont.render("Nothing",True,WHITE)
-          ntdescsub3 = smallfont2.render("38.2/58/65.5/68%",True,WHITE)
-          ntdescsub4 = smallfont.render("N/A",True,WHITE)
+          ntdescsub2 = medsmlfont.render("None",True,WHITE)
+          ntdescsub3 = smallfont2.render("38/58/64/69.5%",True,WHITE)
+          ntdescsub4 = smallfont.render("No added",True,WHITE)
+          ntdescsub5 = smallfont.render("effects",True,WHITE)
           ntdesc.fill(INVIS)
           ntdesc.blit(ntdescsub1,(18,15))
-          ntdesc.blit(ntdescsub2,(3,60))
-          ntdesc.blit(ntdescsub3,(2,90))
+          ntdesc.blit(ntdescsub2,(23,60))
+          ntdesc.blit(ntdescsub3,(7,90))
           pygame.draw.circle(ntdesc,RED,(60,140),30)
           pygame.draw.circle(ntdesc,WHITE,(60,140),20)
           pygame.draw.circle(ntdesc,RED,(60,140),10)
-          ntdesc.blit(ntdescsub4,(40,175))
+          ntdesc.blit(ntdescsub4,(15,175))
+          ntdesc.blit(ntdescsub5,(30,195))
       #weapons
       if True:
-        weapsurf = pygame.Surface([600,300],pygame.SRCALPHA)
+        weapsurf = pygame.Surface([600,400],pygame.SRCALPHA)
         weaptxt = medfont.render("Weapons",True,WHITE)
-        weapsurf.fill(INVIS)
-        pygame.draw.lines(weapsurf,BLACK,False,[(20,83),(20,63),(48,63)],9)
-        #pygame.draw.lines(screen,BLACK,False,[(x+10,y+7),(x+10,y+2),(x+17,y+2)],3)
-        weapsubgun = medsmlfont.render("Gun",True,WHITE)
-        weapsub1 = smallfont.render("",True,WHITE)
-        weapsurf.blit(weaptxt,(200,0))
+        #gun
+        if True:
+          gunsurf = pygame.Surface([600,55],pygame.SRCALPHA)
+          gunsurf.fill(INVIS)
+          pygame.draw.lines(gunsurf,BLACK,False,[(25,38),(25,18),(53,18)],9)
+          gunsub1 = medsmlfont.render("Gun",True,WHITE)
+          gunsub2 = smallfont.render("Fires bullets. Fast fire rate. Button: 1",True,WHITE)
+          gunsurf.blit(gunsub1,(80,5))
+          gunsurf.blit(gunsub2,(80,33))
+        #missile launcher
+        if True:
+          mslnsurf = pygame.Surface([600,55],pygame.SRCALPHA)
+          mslnsurf.fill(INVIS)
+          pygame.draw.polygon(mslnsurf,BLACK,[(6,26),(26,24),(28,20),(66,18),(66,42),(28,40),(26,36),(6,34)])
+          mslnsub1 = medsmlfont.render("Missile Launcher",True,WHITE)
+          mslnsub2 = smallfont.render("Fires missiles. Slow fire rate. Button: 2",True,WHITE)
+          mslnsurf.blit(mslnsub1,(80,5))
+          mslnsurf.blit(mslnsub2,(80,33))
+        #bullets
+        if True:
+          bltsurf = pygame.Surface([600,55],pygame.SRCALPHA)
+          bltssurf = pygame.Surface([80,55],pygame.SRCALPHA)
+          bltsurf.fill(INVIS)
+          bltsub1 = medsmlfont.render("Bullets",True,WHITE)
+          bltsub2 = smallfont.render("Unlimited. Low speed. Cannot go through walls.",True,WHITE)
+        #missiles
+        if True:
+          mslssurf = pygame.Surface([600,55],pygame.SRCALPHA)
+          mslssurf.fill(INVIS)
+          pygame.draw.rect(mslssurf,GRAY,[35-24,25-8,49,17])
+          pygame.draw.polygon(mslssurf,RED,[(35+25,25-8),(35+25,25+8),(35+24+(10*math.sqrt(3)),25)])
+          pygame.draw.polygon(mslssurf,RED,[(35-24,25-9),(35-8,25-9),(35-20,25-17),(35-32,25-17)])
+          pygame.draw.polygon(mslssurf,RED,[(35-24,25+9),(35-8,25+9),(35-20,25+17),(35-32,25+17)])
+          mslssub1 = medsmlfont.render("Missile",True,WHITE)
+          mslssub2 = smallfont.render("Limited supply. High speed. Will destroy walls.",True,WHITE)
+          mslssurf.blit(mslssub1,(80,5))
+          mslssurf.blit(mslssub2,(80,33))
+        stinsurf1 = smallfont.render("Orange targets increase gun fire rate by 1 bullet per second,",True,WHITE)
+        stinsurf2 = smallfont.render("bullet movement speed by 6p/s, missile movement speed",True,WHITE)
+        stinsurf3 = smallfont.render("by 12 p/s, and missile fire rate by 0.1 missles per second.",True,WHITE)
       #help screen
       if True:
         hsubsurf1 = smallfont.render("Shoot the targets. Use WASD to move and the arrow keys to",True,WHITE)
@@ -482,7 +538,7 @@ if True:
         hsubsurf3 = smallfont.render("Ctrl to go slow. Q locks you in fast. Press Esc to pause/",True,WHITE)
         hsubsurf4 = smallfont.render("unpause. Press E to see your stats. Use the number keys to",True,WHITE)
         hsubsurf5 = smallfont.render("switch between weapons. 1 is gun, 2 is missile launcher.",True,WHITE)
-        hsubsurf6 = smallfont.render("Get 150/250/500/2000 points to win.",True,WHITE)
+        hsubsurf6 = smallfont.render("Get 150/250/500/1000 points to win.",True,WHITE)
         hsurf = pygame.Surface((600,200),pygame.SRCALPHA)
         hsurf.fill(INVIS)
         hsurf.blit(hsubsurf1,(10,0))
@@ -498,6 +554,8 @@ if True:
 
 #main loop
 while done == False:
+  display.blit(screen,(0,0))
+  
   #menu
   if current_screen == "menu":
     #event management
@@ -518,7 +576,7 @@ while done == False:
     if True:
       screen.fill(GREEN)
 
-      screen.blit(logo,(50,100))
+      screen.blit(logo,(65,100))
       screen.blit(playsurf,(230,230))
       screen.blit(helpsurf,(230,300))
 
@@ -540,7 +598,7 @@ while done == False:
             page -= 1
     #screen updates
     if True:
-      screen.fill(GRAY)
+      screen.fill(DARKBLUE)
 
       screen.blit(tinyfont.render("P"+str(page),True,WHITE),(0,0))
       screen.blit(backsurf,(230,350))
@@ -567,11 +625,30 @@ while done == False:
         screen.blit(keytxt,(190,5))
         screen.blit(scdtxt,(185,50))
         screen.blit(htdesc,(0,80))
-        screen.blit(h2tdesc,(120,80))
+        screen.blit(dtdesc,(120,80))
         screen.blit(mtdesc,(240,80))
         screen.blit(m2tdesc,(360,80))
         screen.blit(ntdesc,(480,80))
       elif page == 4:
+        bltssurf.fill(INVIS)
+        for i in range(len(hblts)):
+          hblts[i] += 2
+          if hblts[i] > 80:
+            hblts[i] -= 80
+          pygame.draw.circle(bltssurf,RED,[hblts[i],25],4)
+        bltsurf.fill(INVIS)
+        bltsurf.blit(bltsub1,(80,5))
+        bltsurf.blit(bltsub2,(80,33))
+        bltsurf.blit(bltssurf,(-5,0))
+        weapsurf.fill(INVIS)
+        weapsurf.blit(weaptxt,(200,0))
+        weapsurf.blit(gunsurf,(0,50))
+        weapsurf.blit(mslnsurf,(0,100))
+        weapsurf.blit(bltsurf,(0,165))
+        weapsurf.blit(mslssurf,(0,215))
+        weapsurf.blit(stinsurf1,(10,280))
+        weapsurf.blit(stinsurf2,(10,300))
+        weapsurf.blit(stinsurf3,(10,320))
         screen.blit(weapsurf,(0,0))
 
       pygame.display.flip()
@@ -631,6 +708,7 @@ while done == False:
             elif event.pos[0] in range(230,370) and event.pos[1] in range(280,330):
               current_screen = "help"
               prev_screen = "game"
+              page = 1
       #keyboard functions
       if True:
         #key press
@@ -654,7 +732,7 @@ while done == False:
                   speed_mod = 0.25
                 else:
                   speed_mod = 0.5
-              if event.key == pygame.K_LSHIFT or event.key == pygame.K_RSHIFT and s_lock != 1:
+              if event.key == pygame.K_LSHIFT or event.key == pygame.K_RSHIFT and s_lock == -1:
                 speed_mod = 2
           #cheat keys
           if True:
@@ -677,9 +755,11 @@ while done == False:
                 blt_mspd -= 3
                 blt_fspd -= 10
               if event.key == pygame.K_i:
-                score += 250
+                score += ptrq
               if event.key == pygame.K_j:
                 count += 25
+              if event.key == pygame.K_u:
+                msl += 5
               if event.key == pygame.K_h:
                 hlth += 5
                 max_hlth += 5
@@ -689,28 +769,22 @@ while done == False:
               weapon = "gun"
             if event.key == pygame.K_2:
               weapon = "launcher"
-            if event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
+            if event.key == pygame.K_RETURN:
               firing = True
-              fire_timer_g = TICK
-              fire_timer_m = TICK
+              en_p = True
+            if event.key == pygame.K_SPACE:
+              firing = True
+              sp_p = True
             if event.key == pygame.K_UP:
-              if facing == "r":
+              if facing == "r" or facing == "rd":
                 facing = "ru"
-              if facing == "rd":
-                facing = "r"
-              if facing == "l":
+              if facing == "l" or facing == "ld":
                 facing = "lu"
-              if facing == "ld":
-                facing = "l"
             if event.key == pygame.K_DOWN:
-              if facing == "r":
+              if facing == "r" or facing == "ru":
                 facing = "rd"
-              if facing == "ru":
-                facing = "r"
-              if facing == "l":
+              if facing == "l" or facing == "lu":
                 facing = "ld"
-              if facing == "lu":
-                facing = "l"
             if event.key == pygame.K_RIGHT:
               if facing == "lu":
                 facing = "ru"
@@ -748,8 +822,14 @@ while done == False:
             speed_mod = 1
           if event.key == pygame.K_LALT or event.key == pygame.K_RALT:
             speed_mod = 1
-          if event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
-            firing = False
+          if event.key == pygame.K_RETURN:
+            en_p = False
+            if sp_p == False:
+              firing = False
+          if event.key == pygame.K_SPACE:
+            sp_p = False
+            if en_p == False:
+              firing = False
           if event.key == pygame.K_o:
             o_p = False
           if event.key == pygame.K_p:
@@ -757,9 +837,10 @@ while done == False:
     
     if score >= ptrq:
       current_screen = "win"
-      show_stats = True
+      show_stats = 0
     if hlth <= 0:
       current_screen = "game over"
+      show_stats = 0
 
     #constant update variables
     if True:
@@ -770,15 +851,20 @@ while done == False:
       move_speed = round(speed*speed_mod,1)
       if s_lock == 1:
         move_speed *= 2
+      atick = round(clock.get_fps(),1)
       scoresurf = smallfont.render("Points: "+str(score),True,BLACK)
       mslsurf = smallfont.render("Missles: "+str(msl),True,BLACK)
       spdsurf = smallfont.render("Speed: "+str(round(move_speed*TICK))+"p/s",True,BLACK)
       bmssurf = smallfont.render("Bullet movement speed: "+str(round(blt_mspd*TICK))+"p/s",True,BLACK)
-      bfssurf = smallfont.render("Bullet fire rate: "+str(blt_fspd)+"/s",True,BLACK)
+      bfssurf = smallfont.render("Bullet fire rate: "+str(blt_fspd*(TICK/60))+"/s",True,BLACK)
       mmssurf = smallfont.render("Missile movement speed: "+str(round(msl_mspd*TICK))+"p/s",True,BLACK)
-      mfssurf = smallfont.render("Missile fire rate: "+str(msl_fspd)+"/s",True,BLACK)
+      mfssurf = smallfont.render("Missile fire rate: "+str(round(msl_fspd,1)*(TICK/60))+"/s",True,BLACK)
       mrfsurf = smallfont.render("Missile refill per target: "+str(msl_rf),True,BLACK)
       countsurf = smallfont.render("Targets until next wall: "+str(5-count),True,BLACK)
+      targsurf = smallfont.render("Current target types: "+t_type+","+t_type2,True,BLACK)
+      tartmsurf = smallfont.render("Time left for target: "+str(round(((targ_timer_end*TICK)-targ_timer)/TICK,1))+"s",True,BLACK)
+      mfpssurf = smallfont.render("Optimal framerate: "+str(TICK)+"fps",True,BLACK)
+      afpssurf = smallfont.render("Current framerate: "+str(atick)+"("+str(round((atick/TICK)*100,1))+"%)fps",True,BLACK)
       if dif == "med":
         difsurf = smallfont.render("Difficulty: normal",True,BLACK)
       elif dif == "impos":
@@ -790,6 +876,7 @@ while done == False:
       #stats
       if True:
         statsurf.fill(INVIS)
+        statsurf.set_alpha(150)
         statsurf.blit(spdsurf,(254,0))
         statsurf.blit(bmssurf,(84,20))
         statsurf.blit(bfssurf,(175,40))
@@ -801,50 +888,48 @@ while done == False:
           statsurf.blit(difsurf,(188,140))
         else:
           statsurf.blit(difsurf,(223,140))
+        statsurf.blit(tartmsurf,(132,160))
+        if t_type2 == "Light Purple":
+          statsurf.blit(targsurf,(0,180)) 
+        elif t_type2 == "Light Gray":
+          statsurf.blit(targsurf,(15,180))
+        else:
+          statsurf.blit(targsurf,(47,180))
+        statsurf.blit(mfpssurf,(132,355-hlth_offset))
+        statsurf.blit(afpssurf,(60,375-hlth_offset))
       #hud
       if True:
+        hud.set_alpha(230)
         hud.fill(INVIS)
         #health
         hlth_offset = 30*((max_hlth//17)+1)
-        for i in range(5,max_hlth*35+1,35):
-          if i in range(0,630):
-            pygame.draw.polygon(hud,GRAY,[(i,12.5),(i+15,27.5),(i+30,12.5),(i+27.25,7.75),(i+22.5,5),(i+17.75,7.75),(i+15,10),(i+12.25,7.75),(i+7.5,5),(i+2.75,7.75)])
-            pygame.draw.arc(hud,GRAY,[i,3.5,16,18],0,pi,50)
-            pygame.draw.arc(hud,GRAY,[i+15,3.5,16,18],0,pi,50)
-          elif i in range(630,1225):
-            pygame.draw.polygon(hud,GRAY,[(i-630,42.5),(i+15-630,57.5),(i+30-630,42.5),(i+27.25-630,37.75),(i+22.5-630,35),(i+17.75-630,37.75),(i+15-630,40),(i+12.25-630,37.75),(i+7.5-630,35),(i+2.75-630,37.75)])
-            pygame.draw.arc(hud,GRAY,[i-630,33.5,16,18],0,pi,50)
-            pygame.draw.arc(hud,GRAY,[i+15-630,33.5,16,18],0,pi,50)
-          elif i in range(1225,1820):
-            pygame.draw.polygon(hud,GRAY,[(i-1225,72.5),(i+15-1225,87.5),(i+30-1225,72.5),(i+27.25-1225,67.75),(i+22.5-1225,65),(i+17.75-1225,67.75),(i+15-1225,70),(i+12.25-1225,67.75),(i+7.5-1225,65),(i+2.75-1225,67.75)])
-            pygame.draw.arc(hud,GRAY,[i-1225,63.5,16,18],0,pi,50)
-            pygame.draw.arc(hud,GRAY,[i+15-1225,63.5,16,18],0,pi,50)
-          elif i in range(1820,2415):
-            pygame.draw.polygon(hud,GRAY,[(i-1820,102.5),(i+15-1820,117.5),(i+30-1820,102.5),(i+27.25-1820,97.75),(i+22.5-1820,95),(i+17.75-1820,97.75),(i+15-1820,100),(i+12.25-1820,97.75),(i+7.5-1820,95),(i+2.75-1820,97.75)])
-            pygame.draw.arc(hud,GRAY,[i-1820,93.5,16,18],0,pi,50)
-            pygame.draw.arc(hud,GRAY,[i+15-1820,93.5,16,18],0,pi,50)
-        for i in range(5,hlth*35+1,35):
-          if i in range(0,630):
-            pygame.draw.polygon(hud,RED,[(i,12.5),(i+15,27.5),(i+30,12.5),(i+27.25,7.75),(i+22.5,5),(i+17.75,7.75),(i+15,10),(i+12.25,7.75),(i+7.5,5),(i+2.75,7.75)])
-            pygame.draw.arc(hud,RED,[i,3.5,16,18],0,pi,50)
-            pygame.draw.arc(hud,RED,[i+15,3.5,16,18],0,pi,50)
-          elif i in range(630,1225):
-            pygame.draw.polygon(hud,RED,[(i-630,42.5),(i+15-630,57.5),(i+30-630,42.5),(i+27.25-630,37.75),(i+22.5-630,35),(i+17.75-630,37.75),(i+15-630,40),(i+12.25-630,37.75),(i+7.5-630,35),(i+2.75-630,37.75)])
-            pygame.draw.arc(hud,RED,[i-630,33.5,16,18],0,pi,50)
-            pygame.draw.arc(hud,RED,[i+15-630,33.5,16,18],0,pi,50)
-          elif i in range(1225,1820):
-            pygame.draw.polygon(hud,RED,[(i-1225,72.5),(i+15-1225,87.5),(i+30-1225,72.5),(i+27.25-1225,67.75),(i+22.5-1225,65),(i+17.75-1225,67.75),(i+15-1225,70),(i+12.25-1225,67.75),(i+7.5-1225,65),(i+2.75-1225,67.75)])
-            pygame.draw.arc(hud,RED,[i-1225,63.5,16,18],0,pi,50)
-            pygame.draw.arc(hud,RED,[i+15-1225,63.5,16,18],0,pi,50)
-          elif i in range(1820,2415):
-            pygame.draw.polygon(hud,RED,[(i-1820,102.5),(i+15-1820,117.5),(i+30-1820,102.5),(i+27.25-1820,97.75),(i+22.5-1820,95),(i+17.75-1820,97.75),(i+15-1820,100),(i+12.25-1820,97.75),(i+7.5-1820,95),(i+2.75-1820,97.75)])
-            pygame.draw.arc(hud,RED,[i-1820,93.5,16,18],0,pi,50)
-            pygame.draw.arc(hud,RED,[i+15-1820,93.5,16,18],0,pi,50)
+        h_ox = 5
+        h_oy = 0
+        for i in range(max_hlth):
+          pygame.draw.polygon(hud,GRAY,[(h_ox,12.5+h_oy),(h_ox+15,27.5+h_oy),(h_ox+30,12.5+h_oy),(h_ox+27.25,7.75+h_oy),(h_ox+22.5,5+h_oy),(h_ox+17.75,7.75+h_oy),(h_ox+15,10+h_oy),(h_ox+12.25,7.75+h_oy),(h_ox+7.5,5+h_oy),(h_ox+2.75,7.75+h_oy)])
+          pygame.draw.arc(hud,GRAY,[h_ox,3.5+h_oy,16,18],0,pi,50)
+          pygame.draw.arc(hud,GRAY,[h_ox+15,3.5+h_oy,16,18],0,pi,50)
+          h_ox += 35
+          if h_ox > 595:
+            h_ox = 5
+            h_oy += 30
+        h_ox = 5
+        h_oy = 0
+        for i in range(hlth):
+          pygame.draw.polygon(hud,RED,[(h_ox,12.5+h_oy),(h_ox+15,27.5+h_oy),(h_ox+30,12.5+h_oy),(h_ox+27.25,7.75+h_oy),(h_ox+22.5,5+h_oy),(h_ox+17.75,7.75+h_oy),(h_ox+15,10+h_oy),(h_ox+12.25,7.75+h_oy),(h_ox+7.5,5+h_oy),(h_ox+2.75,7.75+h_oy)])
+          pygame.draw.arc(hud,RED,[h_ox,3.5+h_oy,16,18],0,pi,50)
+          pygame.draw.arc(hud,RED,[h_ox+15,3.5+h_oy,16,18],0,pi,50)
+          h_ox += 35
+          if h_ox > 595:
+            h_ox = 5
+            h_oy += 30
         hud.blit(scoresurf,(5,hlth_offset))
         hud.blit(mslsurf,(5,hlth_offset+20))
         #stats
         if show_stats == 1:
           hud.blit(statsurf,(200,hlth_offset))
+        elif show_stats == -1:
+          hud.blit(stattxt,(380,hlth_offset))
 
     #movement
     if True:
@@ -869,45 +954,54 @@ while done == False:
         if move_left == "yes":
           x-=move_speed
 
-    if score >= ptrq:
-      current_screen = "win"
-    if hlth <= 0:
-      current_screen = "game over"
-
     #screen updates
     if True:
       screen.fill(GREEN)
 
+      #health backing
+      if True:
+        h_ox = 5
+        h_oy = 0
+        for i in range(max_hlth):
+          pygame.draw.polygon(screen,WHITE,[(h_ox,12.5+h_oy),(h_ox+15,27.5+h_oy),(h_ox+30,12.5+h_oy),(h_ox+27.25,7.75+h_oy),(h_ox+22.5,5+h_oy),(h_ox+17.75,7.75+h_oy),(h_ox+15,10+h_oy),(h_ox+12.25,7.75+h_oy),(h_ox+7.5,5+h_oy),(h_ox+2.75,7.75+h_oy)])
+          pygame.draw.arc(screen,WHITE,[h_ox,3.5+h_oy,16,18],0,pi,50)
+          pygame.draw.arc(screen,WHITE,[h_ox+15,3.5+h_oy,16,18],0,pi,50)
+          h_ox += 35
+          if h_ox > 595:
+            h_ox = 5
+            h_oy += 30
+
       #body
       if True:
-        pygame.draw.circle(screen,BLACK,[x,y-5],5)
-        pygame.draw.line(screen,BLACK,[x,y],[x,y+20])
-        pygame.draw.line(screen,BLACK,[x,y+20],[x+5,y+35])
-        pygame.draw.line(screen,BLACK,[x,y+20],[x-5,y+35])
+        pygame.draw.circle(screen,bclr,[x+shake,y-5],5)
+        pygame.draw.line(screen,bclr,[x+shake,y],[x+shake,y+20])
+        pygame.draw.line(screen,bclr,[x+shake,y+20],[x+shake+5,y+35])
+        pygame.draw.line(screen,bclr,[x+shake,y+20],[x+shake-5,y+35])
         #right arm
         if True:
           if facing == "ru":
-            pygame.draw.line(screen,BLACK,[x,y+5],[x+(10/ANG),y+5-(10/ANG)],2)
+            pygame.draw.line(screen,bclr,[x+shake,y+5],[x+shake+(10/ANG),y+5-(10/ANG)],2)
           elif facing == "rd":
-            pygame.draw.line(screen,BLACK,[x,y+6],[x+(10/ANG),y+6+(10/ANG)],2)
+            pygame.draw.line(screen,bclr,[x+shake,y+6],[x+shake+(10/ANG),y+6+(10/ANG)],2)
           else:
-            pygame.draw.line(screen,BLACK,[x,y+5],[x+10,y+5])
+            pygame.draw.line(screen,bclr,[x+shake,y+5],[x+shake+10,y+5])
         #left arm
         if True:
           if facing == "lu":
-            pygame.draw.line(screen,BLACK,[x-1,y+5],[x-1-(10/ANG),y+5-(10/ANG)],2)
+            pygame.draw.line(screen,bclr,[x+shake-1,y+5],[x+shake-1-(10/ANG),y+5-(10/ANG)],2)
           elif facing == "ld":
-            pygame.draw.line(screen,BLACK,[x,y+5],[x-(10/ANG),y+5+(10/ANG)],2)
+            pygame.draw.line(screen,bclr,[x+shake-1,y+4],[x+shake-1-(10/ANG),y+4+(10/ANG)],2)
           else:
-            pygame.draw.line(screen,BLACK,[x,y+5],[x-10,y+5])
+            pygame.draw.line(screen,bclr,[x+shake,y+5],[x+shake-10,y+5])
 
       #targets
       if True:
         #type
         if True:
           #red
-          if (dif == "easy" and r in range(0,61)) or (dif == "med" and r in range(0,51)) or (dif == "hard" and r in range(0,41)) or (dif == "impos" and r in range(0,23)):
-            t_type = "r"
+          if (dif == "easy" and r in range(0,61)) or (dif == "med" and r in range(0,51)) or (dif == "hard" and r in range(0,44)) or (dif == "impos" and r in range(0,33)):
+            t_type = "Red"
+            t_type_c = RED
             do_targ_timer = True
             if dif == "easy":
               targ_timer_end = 45
@@ -918,8 +1012,9 @@ while done == False:
             elif dif == "impos":
               targ_timer_end = 5
           #purple
-          elif (dif == "easy" and r in range(61,71)) or (dif == "med" and r in range(51,76)) or (dif == "hard" and r in range(41,76)) or (dif == "impos" and r in range(23,73)):
-            t_type = "p"
+          elif (dif == "easy" and r in range(61,71)) or (dif == "med" and r in range(51,76)) or (dif == "hard" and r in range(44,76)) or (dif == "impos" and r in range(33,73)):
+            t_type = "Purple"
+            t_type_c = PURPLE
             do_targ_timer = True
             if dif == "easy":
               targ_timer_end = 2
@@ -928,10 +1023,11 @@ while done == False:
             elif dif == "hard":
               targ_timer_end = 4
             elif dif == "impos":
-              targ_timer_end = 10
+              targ_timer_end = 4.5
           #orange
           elif (dif == "easy" and r in range(71,81)) or (dif == "med" and r in range(76,84)) or (dif == "hard" and r in range(76,82)) or (dif == "impos" and r in range(73,76)):
-            t_type = "o"
+            t_type = "Orange"
+            t_type_c = ORANGE
             do_targ_timer = True
             if dif == "easy":
               targ_timer_end = 12
@@ -943,7 +1039,8 @@ while done == False:
               targ_timer_end = 2
           #green
           elif (dif == "easy" and r in range(81,91)) or (dif == "med" and r in range(84,91)) or (dif == "hard" and r in range(82,88)) or (dif == "impos" and r in range(76,79)):
-            t_type = "g"
+            t_type = "Green"
+            t_type_c = DARKGREEN
             do_targ_timer = True
             if dif == "easy":
               targ_timer_end = 12
@@ -955,142 +1052,91 @@ while done == False:
               targ_timer_end = 2
           #black
           elif (dif == "easy" and r in range(91,93)) or (dif == "med" and r in range(91,96)) or (dif == "hard" and r in range(88,98)) or (dif == "impos" and r in range(79,100)):
-            t_type = "b"
+            t_type = "Black"
+            t_type_c = BLACK
             do_targ_timer = True
             if dif == "easy":
               targ_timer_end = 2
             elif dif == "med":
               targ_timer_end = 3
             elif dif == "hard":
-              targ_timer_end = 3.9
+              targ_timer_end = 3.4
             elif dif == "impos":
-              targ_timer_end = 9.5
+              targ_timer_end = 4
           #yellow
           elif (dif == "easy" and r in range(93,101)) or (dif == "med" and r in range(96,101)) or (dif == "hard" and r in range(98,101)) or (dif == "impos" and r in range(100,101)):
-            t_type = "y"
+            t_type = "Yellow"
+            t_type_c = YELLOW
             do_targ_timer = True
             if dif == "easy":
-              targ_timer_end = 5
+              targ_timer_end = 7
             elif dif == "med":
               targ_timer_end = 3.5
             elif dif == "hard":
               targ_timer_end = 2.5
             elif dif == "impos":
-              targ_timer_end = 1
-          if t_type != "p" and ((dif == "easy" and r2/10 in range(0,31)) or (dif == "med" and r2/10 in range(0,21)) or (dif == "hard" and r2/10 in range(0,16)) or (dif == "impos" and r2/10 in range(0,6))):
-            t_type2 = "h"
-          elif t_type == "p" and ((dif == "easy" and r2/10 in range(31,43)) or (dif == "med" and r2/10 in range(21,41)) or (dif == "hard" and r2/10 in range(16,46)) or (dif == "impos" and r2/10 in range(6,56))):
-            t_type2 = "h2"
-          elif (dif == "easy" and r2/10 in range(43,68)) or (dif == "med" and r2/10 in range(41,56)) or (dif == "hard" and r2/10 in range(46,54)) or (dif == "impos" and r2/10 in range(56,57)):
-            t_type2 = "m"
-          elif (dif == "easy" and r2/10 in range(68,73)) or (dif == "med" and r2/10 in range(56,58)) or (dif == "hard" and r2/10 in range(54,55)) or (dif == "impos" and r2 in range(570,571)):
-            t_type2 = "m2"
+              targ_timer_end = 1.5
+          #health
+          if t_type != "Purple" and ((dif == "easy" and r2 in range(0,354)) or (dif == "med" and r2 in range(0,268)) or (dif == "hard" and r2 in range(0,222)) or (dif == "impos" and r2 in range(0,84))):
+            t_type2 = "Pink"
+            t_type2_c = PINK
+          #damage
+          elif t_type == "Purple" and ((dif == "easy" and r2 in range(354,487)) or (dif == "med" and r2 in range(268,468)) or (dif == "hard" and r2 in range(222,535)) or (dif == "impos" and r2 in range(84,584))):
+            t_type2 = "Light Purple"
+            t_type2_c = LILAC
+          #missile
+          elif (dif == "easy" and r2 in range(487,737)) or (dif == "med" and r2 in range(468,618)) or (dif == "hard" and r2 in range(535,635)) or (dif == "impos" and r2 in range(584,634)):
+            t_type2 = "Light Gray"
+            t_type2_c = LIGHTGRAY
+          #missile2
+          elif (dif == "easy" and r2 in range(737,787)) or (dif == "med" and r2 in range(618,638)) or (dif == "hard" and r2 in range(635,645)) or (dif == "impos" and r2 in range(634,639)):
+            t_type2 = "Gray"
+            t_type2_c = GRAY
+          #none
           else:
-            t_type2 = "n"
+            t_type2 = "White"
+            t_type2_c = WHITE
         #draw
         if True:
-          if t_type == "r":
-            pygame.draw.circle(screen,RED,[t_x,t_y],15)
-            if t_type2 == "h":
-              pygame.draw.circle(screen,PINK,[t_x,t_y],10)
-            elif t_type2 == "m":
-              pygame.draw.circle(screen,LIGHTGRAY,[t_x,t_y],10)
-            elif t_type2 == "m2":
-              pygame.draw.circle(screen,GRAY,[t_x,t_y],10)
-            elif t_type2 == "n":
-              pygame.draw.circle(screen,WHITE,[t_x,t_y],10)
-            pygame.draw.circle(screen,RED,[t_x,t_y],5)
-          elif t_type == "p":
-            pygame.draw.circle(screen,PURPLE,[t_x,t_y],15)
-            if t_type2 == "h2":
-              pygame.draw.circle(screen,LILAC,[t_x,t_y],10)
-            elif t_type2 == "m":
-              pygame.draw.circle(screen,LIGHTGRAY,[t_x,t_y],10)
-            elif t_type2 == "m2":
-              pygame.draw.circle(screen,GRAY,[t_x,t_y],10)
-            elif t_type2 == "n":
-              pygame.draw.circle(screen,WHITE,[t_x,t_y],10)
-            pygame.draw.circle(screen,PURPLE,[t_x,t_y],5)
-          elif t_type == "g":
-            pygame.draw.circle(screen,DARKGREEN,[t_x,t_y],15)
-            if t_type2 == "h":
-              pygame.draw.circle(screen,PINK,[t_x,t_y],10)
-            elif t_type2 == "m":
-              pygame.draw.circle(screen,LIGHTGRAY,[t_x,t_y],10)
-            elif t_type2 == "m2":
-              pygame.draw.circle(screen,GRAY,[t_x,t_y],10)
-            elif t_type2 == "n":
-              pygame.draw.circle(screen,WHITE,[t_x,t_y],10)
-            pygame.draw.circle(screen,DARKGREEN,[t_x,t_y],5)
-          elif t_type == "o":
-            pygame.draw.circle(screen,ORANGE,[t_x,t_y],15)
-            if t_type2 == "h":
-              pygame.draw.circle(screen,PINK,[t_x,t_y],10)
-            elif t_type2 == "m":
-              pygame.draw.circle(screen,LIGHTGRAY,[t_x,t_y],10)
-            elif t_type2 == "m2":
-              pygame.draw.circle(screen,GRAY,[t_x,t_y],10)
-            elif t_type2 == "n":
-              pygame.draw.circle(screen,WHITE,[t_x,t_y],10)
-            pygame.draw.circle(screen,ORANGE,[t_x,t_y],5)
-          elif t_type == "b":
-            pygame.draw.circle(screen,BLACK,[t_x,t_y],15)
-            if t_type2 == "h":
-              pygame.draw.circle(screen,PINK,[t_x,t_y],10)
-            elif t_type2 == "m":
-              pygame.draw.circle(screen,LIGHTGRAY,[t_x,t_y],10)
-            elif t_type2 == "m2":
-              pygame.draw.circle(screen,GRAY,[t_x,t_y],10)
-            elif t_type2 == "n":
-              pygame.draw.circle(screen,WHITE,[t_x,t_y],10)
-            pygame.draw.circle(screen,BLACK,[t_x,t_y],5)
-          elif t_type == "y":
-            pygame.draw.circle(screen,YELLOW,[t_x,t_y],15)
-            if t_type2 == "h":
-              pygame.draw.circle(screen,PINK,[t_x,t_y],10)
-            elif t_type2 == "m":
-              pygame.draw.circle(screen,LIGHTGRAY,[t_x,t_y],10)
-            elif t_type2 == "m2":
-              pygame.draw.circle(screen,GRAY,[t_x,t_y],10)
-            elif t_type2 == "n":
-              pygame.draw.circle(screen,WHITE,[t_x,t_y],10)
-            pygame.draw.circle(screen,YELLOW,[t_x,t_y],5)
+          pygame.draw.circle(screen,t_type_c,[t_x,t_y],15)
+          pygame.draw.circle(screen,t_type2_c,[t_x,t_y],10)
+          pygame.draw.circle(screen,t_type_c,[t_x,t_y],5)
         #properties
         if collide == True:
-          if t_type == "r":
+          if t_type == "Red":
             score += 2
             count += 1
-          elif t_type == "p":
+          elif t_type == "Purple":
             hlth -= 1
-            screen.fill(RED)
-            pygame.display.flip()
-            pygame.time.wait(100)
+            bclr = RED
+            do_hrttmr = True
             score -= 5
-          elif t_type == "o":
+          elif t_type == "Orange":
             blt_mspd += 0.1
             blt_fspd += 1
-            msl_mspd += 0.1
+            msl_mspd += 0.2
+            msl_fspd += 0.1
             count += 1
             score += 1
-          elif t_type == "g":
-            speed += 0.2
+          elif t_type == "Green":
+            speed += 0.1
             count += 1
             score += 1
-          elif t_type == "b":
+          elif t_type == "Black":
             count += 25
             score -= 5
-          elif t_type == "y":
+          elif t_type == "Yellow":
             score += 10
             count += 1
             max_hlth += 1
-          if t_type2 == "h":
-            if t_type == "p":
-              hlth -= 1
-            else:
-              hlth += 1
-          elif t_type2 == "m":
+            hlth += 1
+          if t_type2 == "Pink":
+            hlth += 1
+          elif t_type2 == "Light Purple":
+            hlth -= 1
+          elif t_type2 == "Light Gray":
             msl += msl_rf
-          elif t_type2 == "m2":
+          elif t_type2 == "Gray":
             msl_rf += 1
           reset = True
           collide = False
@@ -1101,7 +1147,7 @@ while done == False:
           r = random.randint(0,100)
           r2 = random.randint(0,1000)
           t_x = random.randrange(15,585)
-          t_y = random.randrange(15,385)
+          t_y = random.randrange(15,380)
           reset = False
         #timer
         if do_targ_timer == True and paused != 1:
@@ -1111,34 +1157,47 @@ while done == False:
             targ_timer = 0
             targ_timer_end = 0
             reset = True
+        #damage timer
+        if do_hrttmr == True:
+          hrttmr += 1
+          if hrttmr % 2 == 0:
+            shake = -1
+          elif hrttmr % 2 == 1:
+            shake = 1
+          if hrttmr == 15:
+            do_hrttmr = False
+            hrttmr = 0
+            bclr = BLACK
+            shake = 0
 
       #gun
       if weapon == "gun":
         if facing == "r":
-          pygame.draw.lines(screen,BLACK,False,[(x+10,y+7),(x+10,y+2),(x+17,y+2)],3)
+          pygame.draw.polygon(screen,BLACK,[(x+9,y+7),(x+9,y+1),(x+17,y),(x+17,y+3),(x+11,y+3),(x+11,y+7)])
           guntip = [x+17,y+2]
         elif facing == "l":
-          pygame.draw.lines(screen,BLACK,False,[(x-10,y+7),(x-10,y+2),(x-17,y+2)],3)
+          pygame.draw.polygon(screen,BLACK,[(x-9,y+7),(x-9,y+1),(x-17,y),(x-17,y+3),(x-11,y+3),(x-11,y+7)])
           guntip = [x-17,y+2]
         elif facing == "ru":
-          pygame.draw.lines(screen,BLACK,False,[(x+2+(10/ANG),y+7-(10/ANG)),(x+2+(5/ANG),y+7-(15/ANG)),(x+2+(12/ANG),y+7-(22/ANG))],4)
+          pygame.draw.polygon(screen,BLACK,[(x+2+(9/ANG),y+7-(9/ANG)),(x+1+(5/ANG),y+7-(15/ANG)),(x+2+(11/ANG),y+7-(23/ANG)),(x+2+(13/ANG),y+7-(21/ANG)),(x+4+(5/ANG),y+7-(15/ANG)),(x+2+(11/ANG),y+7-(12/ANG))])
           guntip = [x+2+(12/ANG),y+7-(22/ANG)]
         elif facing == "rd":
-          pygame.draw.lines(screen,BLACK,False,[(x+2+(10/ANG),y+7+(10/ANG)),(x+2+(15/ANG),y+7+(5/ANG)),(x+2+(22/ANG),y+7+(12/ANG))],4)
-          guntip = [x+2+(22/ANG),y+7+(12/ANG)]
+          pygame.draw.polygon(screen,BLACK,[(x+(9/ANG),y+7+(9/ANG)),(x+(15/ANG),y+6+(5/ANG)),(x+(23/ANG),y+7+(11/ANG)),(x+(21/ANG),y+7+(13/ANG)),(x+(15/ANG),y+9+(5/ANG)),(x+(11/ANG),y+7+(12/ANG))])
+          guntip = [x+(22/ANG),y+7+(12/ANG)]
         elif facing == "lu":
-          pygame.draw.lines(screen,BLACK,False,[(x-2-(10/ANG),y+7-(10/ANG)),(x-2-(5/ANG),y+7-(15/ANG)),(x-2-(12/ANG),y+7-(22/ANG))],4)
+          pygame.draw.polygon(screen,BLACK,[(x-2-(9/ANG),y+7-(9/ANG)),(x-1-(5/ANG),y+7-(15/ANG)),(x-2-(11/ANG),y+7-(23/ANG)),(x-2-(13/ANG),y+7-(21/ANG)),(x-4-(5/ANG),y+7-(15/ANG)),(x-2-(11/ANG),y+7-(12/ANG))])
           guntip = [x-2-(12/ANG),y+7-(22/ANG)]
         elif facing == "ld":
-          pygame.draw.lines(screen,BLACK,False,[(x-2-(10/ANG),y+7+(10/ANG)),(x-2-(15/ANG),y+7+(5/ANG)),(x-2-(22/ANG),y+7+(12/ANG))],4)
-          guntip = [x-2-(22/ANG),y+7+(12/ANG)]
+          pygame.draw.polygon(screen,BLACK,[(x-(9/ANG),y+7+(9/ANG)),(x-(15/ANG),y+6+(5/ANG)),(x-(23/ANG),y+7+(11/ANG)),(x-(21/ANG),y+7+(13/ANG)),(x-(15/ANG),y+9+(5/ANG)),(x-(11/ANG),y+7+(12/ANG))])
+          guntip = [x-(22/ANG),y+7+(12/ANG)]
 
       #bullets
       if True:
         #cooldown
-        if paused != 1 and weapon == "gun":
-          fire_timer_g += blt_fspd
-          if fire_timer_g >= TICK:
+        if paused == -1:
+          if fire_timer_g > 0:
+            fire_timer_g -= blt_fspd
+          if fire_timer_g < 0:
             fire_timer_g = 0
         #values
         if firing == True and fire_timer_g == 0 and weapon == "gun":
@@ -1163,6 +1222,7 @@ while done == False:
             dofx = -(blt_mspd/ANG)
             dofy = (blt_mspd/ANG)
           blts.append([bx,by,dofx,dofy])
+          fire_timer_g = 60
         #management
         for i in range(len(blts)):
           pygame.draw.circle(screen,RED,[blts[i][0],blts[i][1]],1)
@@ -1172,38 +1232,18 @@ while done == False:
           if blts[i][0] < 0 or blts[i][0] > 600:
             del blts[i]
             break
-          if blts[i][0] <= (t_x+15) and blts[i][0] >= (t_x-15) and blts[i][1] <= (t_y+15) and blts[i][1] >= (t_y-15):
+          if blts[i][0] >= t_x-15 and blts[i][0] <= t_x+15 and blts[i][1] >= t_y-15 and blts[i][1] <= t_y+15:
             collide = True
             del blts[i]
             break
 
-      #missile launcher
-      if weapon == "launcher":
-        if facing == "r":
-          pygame.draw.polygon(screen,BLACK,[(x+5,y+4),(x+10,y+3),(x+20,y+2),(x+20,y+8),(x+10,y+7),(x+5,y+6)])
-          guntip = [x+20,y+5]
-        elif facing == "l":
-          pygame.draw.polygon(screen,BLACK,[(x-5,y+4),(x-10,y+3),(x-20,y+2),(x-20,y+8),(x-10,y+7),(x-5,y+6)])
-          guntip = [x-20,y+5]
-        elif facing == "ru":
-          pygame.draw.polygon(screen,BLACK,[(x+(5/ANG),y+4-(5/ANG)),(x+(9/ANG),y+3-(9/ANG)),(x-1+(19/ANG),y+2-(17/ANG)),(x+2+(21/ANG),y+12-(26/ANG)),(x+(9/ANG),y+8-(9/ANG)),(x+2+(5/ANG),y+6-(5/ANG))])
-          guntip = [x+(20/ANG),y+7-(22/ANG)]
-        elif facing == "rd":
-          pygame.draw.polygon(screen,BLACK,[(x+(5/ANG),y+6+(5/ANG)),(x+(9/ANG),y+7+(9/ANG)),(x-1+(19/ANG),y+8+(17/ANG)),(x+2+(21/ANG),y-2+(26/ANG)),(x+(9/ANG),y+2+(9/ANG)),(x+2+(5/ANG),y+4+(5/ANG))])
-          guntip = [x+(20/ANG),y+3+(22/ANG)]
-        elif facing == "lu":
-          pygame.draw.polygon(screen,BLACK,[(x-(5/ANG),y+4-(5/ANG)),(x-(9/ANG),y+3-(9/ANG)),(x+1-(19/ANG),y+2-(17/ANG)),(x-2-(21/ANG),y+12-(26/ANG)),(x-(9/ANG),y+8-(9/ANG)),(x-(5/ANG),y+7-(5/ANG))])
-          guntip = [x-(20/ANG),y+7-(22/ANG)]
-        elif facing == "ld":
-          pygame.draw.polygon(screen,BLACK,[(x-(5/ANG),y+6+(5/ANG)),(x-(9/ANG),y+7+(9/ANG)),(x+1-(19/ANG),y+8+(17/ANG)),(x-2-(21/ANG),y-2+(26/ANG)),(x-(9/ANG),y+2+(9/ANG)),(x-2-(5/ANG),y+4+(5/ANG))])
-          guntip = [x-(20/ANG),y+3+(22/ANG)]
-
       #missles
       if True:
         #cooldown
-        if paused != 1 and weapon == "launcher":
-          fire_timer_m += msl_fspd
-          if fire_timer_m >= TICK:
+        if paused == -1:
+          if fire_timer_m > 0:
+            fire_timer_m -= msl_fspd
+          if fire_timer_m < 0:
             fire_timer_m = 0
         #values
         if firing == True and fire_timer_m == 0 and weapon == "launcher" and msl > 0:
@@ -1229,34 +1269,35 @@ while done == False:
             dofy = (msl_mspd/ANG)
           msls.append([mx,my,dofx,dofy,facing])
           msl -= 1
+          fire_timer_m = 60
         #management
         for i in range(len(msls)):
-          if facing == "r":
+          if msls[i][4] == "r":
             pygame.draw.rect(screen,GRAY,[msls[i][0]-6,msls[i][1]-2,13,5])
             pygame.draw.polygon(screen,RED,[(msls[i][0]+7,msls[i][1]-2),(msls[i][0]+7,msls[i][1]+2),(msls[i][0]+6+(2.5*math.sqrt(3)),msls[i][1])])
             pygame.draw.polygon(screen,RED,[(msls[i][0]-6,msls[i][1]-3),(msls[i][0]-2,msls[i][1]-3),(msls[i][0]-5,msls[i][1]-5),(msls[i][0]-8,msls[i][1]-5)])
             pygame.draw.polygon(screen,RED,[(msls[i][0]-6,msls[i][1]+3),(msls[i][0]-2,msls[i][1]+3),(msls[i][0]-5,msls[i][1]+5),(msls[i][0]-8,msls[i][1]+5)])
-          elif facing == "l":
+          elif msls[i][4] == "l":
             pygame.draw.rect(screen,GRAY,[msls[i][0]-6,msls[i][1]-2,13,5])
             pygame.draw.polygon(screen,RED,[(msls[i][0]-7,msls[i][1]-2),(msls[i][0]-7,msls[i][1]+2),(msls[i][0]-6-(2.5*math.sqrt(3)),msls[i][1])])
             pygame.draw.polygon(screen,RED,[(msls[i][0]+6,msls[i][1]-3),(msls[i][0]+2,msls[i][1]-3),(msls[i][0]+5,msls[i][1]-5),(msls[i][0]+8,msls[i][1]-5)])
             pygame.draw.polygon(screen,RED,[(msls[i][0]+6,msls[i][1]+3),(msls[i][0]+2,msls[i][1]+3),(msls[i][0]+5,msls[i][1]+5),(msls[i][0]+8,msls[i][1]+5)])
-          elif facing == "ru":
+          elif msls[i][4] == "ru":
             pygame.draw.polygon(screen,GRAY,[(msls[i][0]-(8/ANG),msls[i][1]+(4/ANG)),(msls[i][0]+(4/ANG),msls[i][1]-(8/ANG)),(msls[i][0]+(8/ANG),msls[i][1]-(4/ANG)),(msls[i][0]-(4/ANG),msls[i][1]+(8/ANG))])
             pygame.draw.polygon(screen,RED,[(msls[i][0]+(4/ANG),msls[i][1]-(8/ANG)),(msls[i][0]+(8/ANG),msls[i][1]-(4/ANG)),(msls[i][0]+(4/ANG)-(5*-math.cos(pi/12)),msls[i][1]-(8/ANG)+(5*-math.sin(pi/12))),(msls[i][0]+(4/ANG)-(5*-math.cos(pi/12))-2,msls[i][1]-(8/ANG)+(5*-math.sin(pi/12)))])
             pygame.draw.polygon(screen,RED,[(msls[i][0]-(8/ANG),msls[i][1]+(3/ANG)),(msls[i][0]-(5/ANG),msls[i][1]-(1/ANG)),(msls[i][0]-(8/ANG),msls[i][1]-(1/ANG)),(msls[i][0]-(12/ANG),msls[i][1]+(3/ANG))])
             pygame.draw.polygon(screen,RED,[(msls[i][0]-(3/ANG),msls[i][1]+(9/ANG)),(msls[i][0]+(1/ANG),msls[i][1]+(5/ANG)),(msls[i][0],msls[i][1]+(8/ANG)),(msls[i][0]-(3/ANG),msls[i][1]+(12/ANG))])
-          elif facing == "rd":
+          elif msls[i][4] == "rd":
             pygame.draw.polygon(screen,GRAY,[(msls[i][0]-(8/ANG),msls[i][1]-(4/ANG)),(msls[i][0]+(4/ANG),msls[i][1]+(8/ANG)),(msls[i][0]+(8/ANG),msls[i][1]+(4/ANG)),(msls[i][0]-(4/ANG),msls[i][1]-(8/ANG))])
             pygame.draw.polygon(screen,RED,[(msls[i][0]+(4/ANG),msls[i][1]+(8/ANG)),(msls[i][0]+(8/ANG),msls[i][1]+(4/ANG)),(msls[i][0]+(4/ANG)-(5*-math.cos(pi/12)),msls[i][1]+(8/ANG)-(5*-math.sin(pi/12))),(msls[i][0]+(4/ANG)-(5*-math.cos(pi/12))-2,msls[i][1]+(8/ANG)-(5*-math.sin(pi/12)))])
             pygame.draw.polygon(screen,RED,[(msls[i][0]-(8/ANG),msls[i][1]-(3/ANG)),(msls[i][0]-(5/ANG),msls[i][1]+(1/ANG)),(msls[i][0]-(8/ANG),msls[i][1]+(1/ANG)),(msls[i][0]-(12/ANG),msls[i][1]-(3/ANG))])
             pygame.draw.polygon(screen,RED,[(msls[i][0]-(3/ANG),msls[i][1]-(9/ANG)),(msls[i][0]+(1/ANG),msls[i][1]-(5/ANG)),(msls[i][0],msls[i][1]-(8/ANG)),(msls[i][0]-(3/ANG),msls[i][1]-(12/ANG))])
-          elif facing == "lu":
+          elif msls[i][4] == "lu":
             pygame.draw.polygon(screen,GRAY,[(msls[i][0]+(8/ANG),msls[i][1]+(4/ANG)),(msls[i][0]-(4/ANG),msls[i][1]-(8/ANG)),(msls[i][0]-(8/ANG),msls[i][1]-(4/ANG)),(msls[i][0]+(4/ANG),msls[i][1]+(8/ANG))])
             pygame.draw.polygon(screen,RED,[(msls[i][0]-(4/ANG),msls[i][1]-(8/ANG)),(msls[i][0]-(8/ANG),msls[i][1]-(4/ANG)),(msls[i][0]-(4/ANG)+(5*-math.cos(pi/12)),msls[i][1]-(8/ANG)+(5*-math.sin(pi/12))),(msls[i][0]-(4/ANG)+(5*-math.cos(pi/12))+2,msls[i][1]-(8/ANG)+(5*-math.sin(pi/12)))])
             pygame.draw.polygon(screen,RED,[(msls[i][0]+(8/ANG),msls[i][1]+(3/ANG)),(msls[i][0]+(5/ANG),msls[i][1]-(1/ANG)),(msls[i][0]+(8/ANG),msls[i][1]-(1/ANG)),(msls[i][0]+(12/ANG),msls[i][1]+(3/ANG))])
             pygame.draw.polygon(screen,RED,[(msls[i][0]+(3/ANG),msls[i][1]+(9/ANG)),(msls[i][0]-(1/ANG),msls[i][1]+(5/ANG)),(msls[i][0]-(1/ANG),msls[i][1]+(8/ANG)),(msls[i][0]+(3/ANG),msls[i][1]+(12/ANG))])
-          elif facing == "ld":
+          elif msls[i][4] == "ld":
             pygame.draw.polygon(screen,GRAY,[(msls[i][0]+(8/ANG),msls[i][1]-(4/ANG)),(msls[i][0]-(4/ANG),msls[i][1]+(8/ANG)),(msls[i][0]-(8/ANG),msls[i][1]+(4/ANG)),(msls[i][0]+(4/ANG),msls[i][1]-(8/ANG))])
             pygame.draw.polygon(screen,RED,[(msls[i][0]-(4/ANG),msls[i][1]+(8/ANG)),(msls[i][0]-(8/ANG),msls[i][1]+(4/ANG)),(msls[i][0]-(4/ANG)+(5*-math.cos(pi/12)),msls[i][1]+(8/ANG)-(5*-math.sin(pi/12))),(msls[i][0]-(4/ANG)+(5*-math.cos(pi/12))+2,msls[i][1]+(8/ANG)-(5*-math.sin(pi/12)))])
             pygame.draw.polygon(screen,RED,[(msls[i][0]+(8/ANG),msls[i][1]-(3/ANG)),(msls[i][0]+(5/ANG),msls[i][1]+(1/ANG)),(msls[i][0]+(8/ANG),msls[i][1]+(1/ANG)),(msls[i][0]+(12/ANG),msls[i][1]-(3/ANG))])
@@ -1267,10 +1308,114 @@ while done == False:
           if msls[i][0] < 0 or msls[i][0] > 600:
             del msls[i]
             break
-          if msls[i][0] <= (t_x+15) and msls[i][0] >= (t_x-15) and msls[i][1] <= (t_y+15) and msls[i][1] >= (t_y-15):
-            collide = True
-            del msls[i]
+          if msls[i][4] == "r":
+            for j in range(round(msls[i][0]-6),round(msls[i][0]+12)):
+              for k in range(round(msls[i][1]-2),round(msls[i][1]+3)):
+                if j in range(t_x-15,t_x+16) and k in range(t_y-15,t_y+16):
+                  collide = True
+                  del(msls[i])
+                  do_break = True
+                  break
+              if do_break == True:
+                break
+          elif msls[i][4] == "l":
+            for j in range(round(msls[i][0]-12),round(msls[i][0]+6)):
+              for k in range(round(msls[i][1]-2),round(msls[i][1]+3)):
+                if j in range(t_x-15,t_x+16) and k in range(t_y-15,t_y+16):
+                  collide = True
+                  del(msls[i])
+                  do_break = True
+                  break
+              if do_break == True:
+                break
+          elif msls[i][4] == "ru":
+            for j in range(round(msls[i][0]+(4/ANG)-(5*-math.cos(pi/12))-(msl_mspd+1)),round(msls[i][0]+(4/ANG)-(5*-math.cos(pi/12)))):
+              for k in range(round(msls[i][1]-(8/ANG)+(5*-math.sin(pi/12))),round(msls[i][1]-(8/ANG)+(5*-math.sin(pi/12))+(msl_mspd+1))):
+                if j in range(t_x-15,t_x+16) and k in range(t_y-15,t_y+16):
+                  collide = True
+                  del(msls[i])
+                  do_break = True
+                  break
+              if do_break == True:
+                break
+          elif msls[i][4] == "rd":
+            for j in range(round(msls[i][0]+(4/ANG)-(5*-math.cos(pi/12))-(msl_mspd+1)),round(msls[i][0]+(4/ANG)-(5*-math.cos(pi/12)))):
+              for k in range(round(msls[i][1]+(8/ANG)+(5*-math.sin(pi/12))-(msl_mspd+1)),round(msls[i][1]+(8/ANG)+(5*-math.sin(pi/12)))):
+                if j in range(t_x-15,t_x+16) and k in range(t_y-15,t_y+16):
+                  collide = True
+                  del(msls[i])
+                  do_break = True
+                  break
+              if do_break == True:
+                break
+          elif msls[i][4] == "lu":
+            for j in range(round(msls[i][0]-(4/ANG)-(5*-math.cos(pi/12))),round(msls[i][0]-(4/ANG)-(5*-math.cos(pi/12))+(msl_mspd+1))):
+              for k in range(round(msls[i][1]-(8/ANG)+(5*-math.sin(pi/12))),round(msls[i][1]-(8/ANG)+(5*-math.sin(pi/12))+(msl_mspd+1))):
+                if j in range(t_x-15,t_x+16) and k in range(t_y-15,t_y+16):
+                  collide = True
+                  del(msls[i])
+                  do_break = True
+                  break
+              if do_break == True:
+                break
+          elif msls[i][4] == "ld":
+            for j in range(round(msls[i][0]-(4/ANG)-(5*-math.cos(pi/12))),round(msls[i][0]-(4/ANG)-(5*-math.cos(pi/12))+(msl_mspd+1))):
+              for k in range(round(msls[i][1]+(8/ANG)+(5*-math.sin(pi/12))-(msl_mspd+1)),round(msls[i][1]+(8/ANG)+(5*-math.sin(pi/12)))):
+                if j in range(t_x-15,t_x+16) and k in range(t_y-15,t_y+16):
+                  collide = True
+                  del(msls[i])
+                  do_break = True
+                  break
+              if do_break == True:
+                break
+          if do_break == True:
+            do_break = False
             break
+
+      #missile launcher
+      if weapon == "launcher":
+        if facing == "r":
+          pygame.draw.polygon(screen,BLACK,[(x+5,y+4),(x+10,y+3),(x+20,y+2),(x+20,y+8),(x+10,y+7),(x+5,y+6)])
+          guntip = [x+15,y+5]
+          if fire_timer_m == 0 and msl > 0:
+            pygame.draw.polygon(screen,RED,[(x+21,y+3),(x+21,y+7),(x+20+(2.5*math.sqrt(3)),y+5)])
+            pygame.draw.polygon(screen,RED,[(x+9,y+2),(x+13,y+2),(x+10,y),(x+7,y)])
+            pygame.draw.polygon(screen,RED,[(x+9,y+8),(x+13,y+8),(x+10,y+10),(x+7,y+10)])
+        elif facing == "l":
+          pygame.draw.polygon(screen,BLACK,[(x-5,y+4),(x-10,y+3),(x-20,y+2),(x-20,y+8),(x-10,y+7),(x-5,y+6)])
+          guntip = [x-15,y+5]
+          if fire_timer_m == 0 and msl > 0:
+            pygame.draw.polygon(screen,RED,[(x-21,y+3),(x-21,y+7),(x-20-(2.5*math.sqrt(3)),y+5)])
+            pygame.draw.polygon(screen,RED,[(x-9,y+2),(x-13,y+2),(x-10,y),(x-7,y)])
+            pygame.draw.polygon(screen,RED,[(x-9,y+8),(x-13,y+8),(x-10,y+10),(x-7,y+10)])
+        elif facing == "ru":
+          pygame.draw.polygon(screen,BLACK,[(x+(5/ANG),y+4-(5/ANG)),(x+(9/ANG),y+3-(9/ANG)),(x-1+(19/ANG),y+2-(17/ANG)),(x+2+(21/ANG),y+12-(26/ANG)),(x+(12/ANG),y+8-(9/ANG)),(x+(12/ANG),y+8-(12/ANG)),(x+2+(5/ANG),y+6-(5/ANG))])
+          guntip = [x+(16/ANG),y+7-(18/ANG)]
+          if fire_timer_m == 0 and msl > 0:
+            pygame.draw.polygon(screen,RED,[(x+1+(19/ANG),y+6-(23/ANG)),(x+1+(23/ANG),y+6-(19/ANG)),(x+1+(19/ANG)-(5*-math.cos(pi/12)),y+6-(23/ANG)+(5*-math.sin(pi/12))),(x-1+(19/ANG)-(5*-math.cos(pi/12)),y+6-(23/ANG)+(5*-math.sin(pi/12)))])
+            pygame.draw.polygon(screen,RED,[(x+1+(7/ANG),y+5-(12/ANG)),(x+1+(10/ANG),y+5-(16/ANG)),(x+1+(7/ANG),y+5-(16/ANG)),(x+1+(3/ANG),y+5-(12/ANG))])
+            pygame.draw.polygon(screen,RED,[(x+1+(12/ANG),y+6-(6/ANG)),(x+1+(16/ANG),y+6-(10/ANG)),(x+1+(15/ANG),y+6-(7/ANG)),(x+1+(12/ANG),y+6-(3/ANG))])
+        elif facing == "rd":
+          pygame.draw.polygon(screen,BLACK,[(x+(5/ANG),y+6+(5/ANG)),(x+(9/ANG),y+7+(9/ANG)),(x-1+(19/ANG),y+8+(17/ANG)),(x+2+(21/ANG),y-2+(26/ANG)),(x+(14/ANG),y+2+(12/ANG)),(x+(12/ANG),y+2+(12/ANG)),(x+2+(5/ANG),y+4+(5/ANG))])
+          guntip = [x+(16/ANG),y+3+(18/ANG)]
+          if fire_timer_m == 0 and msl > 0:
+            pygame.draw.polygon(screen,RED,[(x+(19/ANG),y+5+(23/ANG)),(x+(23/ANG),y+5+(19/ANG)),(x+(19/ANG)-(5*-math.cos(pi/12)),y+5+(23/ANG)-(5*-math.sin(pi/12))),(x-2+(19/ANG)-(5*-math.cos(pi/12)),y+5+(23/ANG)-(5*-math.sin(pi/12)))])
+            pygame.draw.polygon(screen,RED,[(x+1+(7/ANG),y+6+(12/ANG)),(x+1+(10/ANG),y+6+(16/ANG)),(x+1+(7/ANG),y+6+(16/ANG)),(x+1+(3/ANG),y+6+(12/ANG))])
+            pygame.draw.polygon(screen,RED,[(x+1+(12/ANG),y+5+(6/ANG)),(x+1+(16/ANG),y+5+(10/ANG)),(x+1+(15/ANG),y+5+(7/ANG)),(x+1+(12/ANG),y+5+(3/ANG))])
+        elif facing == "lu":
+          pygame.draw.polygon(screen,BLACK,[(x-(5/ANG),y+4-(5/ANG)),(x-(9/ANG),y+3-(9/ANG)),(x+1-(19/ANG),y+2-(17/ANG)),(x-2-(21/ANG),y+12-(26/ANG)),(x-(12/ANG),y+8-(9/ANG)),(x-(12/ANG),y+8-(12/ANG)),(x-2-(5/ANG),y+6-(5/ANG))])
+          guntip = [x-(16/ANG),y+7-(18/ANG)]
+          if fire_timer_m == 0 and msl > 0:
+            pygame.draw.polygon(screen,RED,[(x-1-(19/ANG),y+6-(23/ANG)),(x-1-(23/ANG),y+6-(19/ANG)),(x-1-(19/ANG)+(5*-math.cos(pi/12)),y+6-(23/ANG)+(5*-math.sin(pi/12))),(x+1-(19/ANG)+(5*-math.cos(pi/12)),y+6-(23/ANG)+(5*-math.sin(pi/12)))])
+            pygame.draw.polygon(screen,RED,[(x-1-(7/ANG),y+5-(12/ANG)),(x-1-(10/ANG),y+5-(16/ANG)),(x-1-(7/ANG),y+5-(16/ANG)),(x-1-(3/ANG),y+5-(12/ANG))])
+            pygame.draw.polygon(screen,RED,[(x-1-(12/ANG),y+6-(6/ANG)),(x-1-(16/ANG),y+6-(10/ANG)),(x-1-(15/ANG),y+6-(7/ANG)),(x-1-(12/ANG),y+6-(3/ANG))])
+        elif facing == "ld":
+          pygame.draw.polygon(screen,BLACK,[(x-(5/ANG),y+6+(5/ANG)),(x-(9/ANG),y+7+(9/ANG)),(x+1-(19/ANG),y+8+(17/ANG)),(x-2-(21/ANG),y-2+(26/ANG)),(x-(14/ANG),y+2+(12/ANG)),(x-(12/ANG),y+2+(12/ANG)),(x-2-(5/ANG),y+4+(5/ANG))])
+          guntip = [x-(16/ANG),y+3+(18/ANG)]
+          if fire_timer_m == 0 and msl > 0:
+            pygame.draw.polygon(screen,RED,[(x-(19/ANG),y+5+(23/ANG)),(x-(23/ANG),y+5+(19/ANG)),(x-(19/ANG)+(5*-math.cos(pi/12)),y+5+(23/ANG)-(5*-math.sin(pi/12))),(x+2-(19/ANG)+(5*-math.cos(pi/12)),y+5+(23/ANG)-(5*-math.sin(pi/12)))])
+            pygame.draw.polygon(screen,RED,[(x-1-(7/ANG),y+6+(12/ANG)),(x-1-(10/ANG),y+6+(16/ANG)),(x-1-(7/ANG),y+6+(16/ANG)),(x-1-(3/ANG),y+6+(12/ANG))])
+            pygame.draw.polygon(screen,RED,[(x-1-(12/ANG),y+5+(6/ANG)),(x-1-(16/ANG),y+5+(10/ANG)),(x-1-(15/ANG),y+5+(7/ANG)),(x-1-(12/ANG),y+5+(3/ANG))])
 
       #walls
       if True:
@@ -1282,7 +1427,7 @@ while done == False:
           walls.append([wx,wy])
         #management
         for i in range(len(walls)):
-          pygame.draw.line(screen,BLACK,(walls[i][0],walls[i][1]-15),(walls[i][0],walls[i][1]+15),3)
+          pygame.draw.line(screen,[50,50,50],(walls[i][0],walls[i][1]-15),(walls[i][0],walls[i][1]+15),3)
           for j in range(len(blts)):
             if blts[j][0]>=(walls[i][0]-(blt_mspd/2)) and blts[j][0]<=(walls[i][0]+(blt_mspd/2)) and blts[j][1]>=(walls[i][1]-15) and blts[j][1]<=(walls[i][1]+15):
               del(blts[j])
@@ -1353,11 +1498,12 @@ while done == False:
 
       #pause
       if paused == 1:
+        screen.blit(pausesurf,(0,0))
         pause_timer += 1
         if pause_timer > 45:
-          pause_timer = -35
+          pause_timer = -45
         if pause_timer > 0:
-          screen.blit(pausesurf,(220,150))
+          screen.blit(pausetxt,(220,150))
         screen.blit(menusurf,(230,210))
         screen.blit(helpsurf,(230,280))
 
@@ -1377,20 +1523,26 @@ while done == False:
           elif event.pos[0] in range(400,500) and event.pos[1] in range(275,325):
             current_screen = "menu"
     if fadewhite[3] < 250 :
-      fadewhite[3] += 0.5
+      fadewhite[3] += 2
     winsurf.fill(fadewhite)
     winsurf.blit(hud,(0,0))
+    if dif == "impos":
+      winsurf.blit(difsurf,(388,hlth_offset))
+    else:
+      winsurf.blit(difsurf,(423,hlth_offset))
     winsurf.blit(winsubsurf,(150,150))
-    winsurf.blit(resurf,(190,220))
+    winsurf.blit(resurf,(70,225))
     winsurf.blit(yessurf,(100,275))
     winsurf.blit(nosurf,(400,275))
     screen.blit(winsurf,(0,0))
     pygame.display.flip()
 
   #game over
-  if hlth <= 0:
+  if current_screen == "game over":
     pygame.mouse.set_visible(True)
     for event in pygame.event.get():
+      if event.type == pygame.QUIT:
+        done = True
       if event.type == pygame.MOUSEBUTTONDOWN:
         if event.button == 1:
           if event.pos[0] in range(100,200) and event.pos[1] in range(275,325):
@@ -1399,11 +1551,16 @@ while done == False:
           elif event.pos[0] in range(400,500) and event.pos[1] in range(275,325):
             current_screen = "menu"
     if fadeblack[3] < 250 :
-      fadeblack[3] += 0.5
+      fadeblack[3] += 5
+    screen.fill(RED)
     gmovsurf.fill(fadeblack)
     gmovsurf.blit(hud,(0,0))
+    if dif == "impos":
+      gmovsurf.blit(difsurf,(388,hlth_offset))
+    else:
+      gmovsurf.blit(difsurf,(423,hlth_offset))
     gmovsurf.blit(gmovsubsurf,(100,150))
-    gmovsurf.blit(resurf,(190,220))
+    gmovsurf.blit(resurf,(70,225))
     gmovsurf.blit(yessurf,(100,275))
     gmovsurf.blit(nosurf,(400,275))
     screen.blit(gmovsurf,(0,0))
@@ -1420,7 +1577,6 @@ while done == False:
     speed = 1
     speed_mod = 1
     s_lock = -1
-    firing = False
     fire_timer_g = 0
     blts = []
     blt_mspd = 3
@@ -1434,9 +1590,9 @@ while done == False:
     weapon = "gun"
     guntip = [x+17,y+2]
     score = 0
-    show_stats = -1
     hlth = 3
     max_hlth = 4
+    show_stats = -1
     count = 0
     walls = []
     do_break = False
@@ -1447,17 +1603,17 @@ while done == False:
     t_x = random.randrange(15,585)
     t_y = random.randrange(15,385)
     targ_timer = 0
-    do_targ_timer = False
-    targ_timer_end = 0
     o_p = False
     p_p = False
     paused = -1
     pause_timer = 0
-    done = False
     page = 1
     var_reset = False
     fadeblack = [10,10,10,0]
     fadewhite = [255,255,255,0]
+    bclr = BLACK
+    hrttmr = 0 
+    do_hrttmr = False
 
   clock.tick(TICK)
 
