@@ -19,7 +19,10 @@ if True:
       LIGHTGRAY = (200,200,200)
       DARKGRAY = (75,75,75)
       RED = (255,0,0)
+      MAROON = (100,0,0)
+      PINK = (255,150,150)
       GREEN = (0,255,0)
+      DARKGREEN = (0,200,0)
       BLUE = (0,0,255)
       DARKBLUE = (0,0,100)
       YELLOW = (255,255,0)
@@ -28,10 +31,7 @@ if True:
       ORANGE = (255,150,0)
       SKYBLUE = (0,150,255)
       BROWN = (120,70,0)
-      DARKGREEN = (0,200,0)
       INVIS = (255,255,255,0)
-      PINK = (255,150,150)
-      MAROON = (100,0,0)
       fadeblack = [10,10,10,0]
       fadewhite = [255,255,255,0]
   #variables
@@ -75,7 +75,6 @@ if True:
     if True:
       count = 0
       walls = []
-      do_break = False
     #targets
     if True:
       reset = False
@@ -88,8 +87,8 @@ if True:
       do_targ_timer = False
       targ_timer_end = 0
       t_type = "Red"
-      t_type2 = "n"
-      t_type2_f = "None"
+      t_type2 = "None"
+      gt = []
     #misc.
     if True:
       o_p = False
@@ -105,6 +104,7 @@ if True:
       hrttmr = 0
       do_hrttmr = False
       shake = 0
+      do_break = False
   #misc.
   if True:
     #game
@@ -302,7 +302,7 @@ if True:
           otdescsub1_2 = smallfont2.render("10/8/6/3%",True,WHITE)
           otdescsub2 = smallfont.render("Points: 1",True,WHITE)
           otdescsub3 = smallfont.render("Time:",True,WHITE)
-          otdescsub3_2 = smallfont2.render("12/8.5/5/2s",True,WHITE)
+          otdescsub3_2 = smallfont2.render("12/8.5/5/2.5s",True,WHITE)
           otdescsub4 = smallfont.render("Weapons",True,WHITE)
           otdescsub5 = smallfont.render("(see P4)",True,WHITE)
           otdesc.fill(INVIS)
@@ -313,7 +313,7 @@ if True:
           pygame.draw.circle(otdesc,ORANGE,(50,85),10)
           otdesc.blit(otdescsub2,(5,120))
           otdesc.blit(otdescsub3,(20,140))
-          otdesc.blit(otdescsub3_2,(10,160))
+          otdesc.blit(otdescsub3_2,(7,160))
           otdesc.blit(spctxt,(10,175))
           otdesc.blit(otdescsub4,(5,195))
           otdesc.blit(otdescsub5,(10,215))
@@ -325,7 +325,7 @@ if True:
           gtdescsub1_2 = smallfont2.render("10/7/6/3%",True,WHITE)
           gtdescsub2 = smallfont.render("Points: 1",True,WHITE)
           gtdescsub3 = smallfont.render("Time:",True,WHITE)
-          gtdescsub3_2 = smallfont2.render("12/8.5/5/2s",True,WHITE)
+          gtdescsub3_2 = smallfont2.render("12/8.5/5/2.5s",True,WHITE)
           gtdescsub4 = smallfont.render("Speed",True,WHITE)
           gtdescsub5 = smallfont.render("+12 (p/s)",True,WHITE)
           gtdesc.fill(INVIS)
@@ -336,7 +336,7 @@ if True:
           pygame.draw.circle(gtdesc,DARKGREEN,(50,85),10)
           gtdesc.blit(gtdescsub2,(5,120))
           gtdesc.blit(gtdescsub3,(20,140))
-          gtdesc.blit(gtdescsub3_2,(10,160))
+          gtdesc.blit(gtdescsub3_2,(7,160))
           gtdesc.blit(spctxt,(10,175))
           gtdesc.blit(gtdescsub4,(17,195))
           gtdesc.blit(gtdescsub5,(8,215))
@@ -698,6 +698,8 @@ while done == False:
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
         done = True
+      if event.type == pygame.WINDOWFOCUSLOST:
+        paused = 1
       #mouse
       if event.type == pygame.MOUSEBUTTONDOWN:
         if event.button == 1:
@@ -855,6 +857,10 @@ while done == False:
       scoresurf = smallfont.render("Points: "+str(score),True,BLACK)
       mslsurf = smallfont.render("Missles: "+str(msl),True,BLACK)
       spdsurf = smallfont.render("Speed: "+str(round(move_speed*TICK))+"p/s",True,BLACK)
+      if s_lock == 1:
+        slcksurf = smallfont.render("Speed lock: On",True,BLACK)
+      elif s_lock == -1:
+        slcksurf = smallfont.render("Speed lock: Off",True,BLACK)
       bmssurf = smallfont.render("Bullet movement speed: "+str(round(blt_mspd*TICK))+"p/s",True,BLACK)
       bfssurf = smallfont.render("Bullet fire rate: "+str(blt_fspd*(TICK/60))+"/s",True,BLACK)
       mmssurf = smallfont.render("Missile movement speed: "+str(round(msl_mspd*TICK))+"p/s",True,BLACK)
@@ -878,23 +884,24 @@ while done == False:
         statsurf.fill(INVIS)
         statsurf.set_alpha(150)
         statsurf.blit(spdsurf,(254,0))
-        statsurf.blit(bmssurf,(84,20))
-        statsurf.blit(bfssurf,(175,40))
-        statsurf.blit(mmssurf,(71,60))
-        statsurf.blit(mfssurf,(162,80))
-        statsurf.blit(mrfsurf,(92,100))
-        statsurf.blit(countsurf,(97,120))
+        statsurf.blit(slcksurf,(208,20))
+        statsurf.blit(bmssurf,(84,40))
+        statsurf.blit(bfssurf,(175,60))
+        statsurf.blit(mmssurf,(71,80))
+        statsurf.blit(mfssurf,(162,100))
+        statsurf.blit(mrfsurf,(92,120))
+        statsurf.blit(countsurf,(97,140))
         if dif == "impos":
-          statsurf.blit(difsurf,(188,140))
+          statsurf.blit(difsurf,(188,160))
         else:
-          statsurf.blit(difsurf,(223,140))
-        statsurf.blit(tartmsurf,(132,160))
+          statsurf.blit(difsurf,(223,160))
+        statsurf.blit(tartmsurf,(132,180))
         if t_type2 == "Light Purple":
-          statsurf.blit(targsurf,(0,180)) 
+          statsurf.blit(targsurf,(0,200)) 
         elif t_type2 == "Light Gray":
-          statsurf.blit(targsurf,(15,180))
+          statsurf.blit(targsurf,(15,200))
         else:
-          statsurf.blit(targsurf,(47,180))
+          statsurf.blit(targsurf,(47,200))
         statsurf.blit(mfpssurf,(132,355-hlth_offset))
         statsurf.blit(afpssurf,(60,375-hlth_offset))
       #hud
@@ -1001,7 +1008,7 @@ while done == False:
           #red
           if (dif == "easy" and r in range(0,61)) or (dif == "med" and r in range(0,51)) or (dif == "hard" and r in range(0,44)) or (dif == "impos" and r in range(0,33)):
             t_type = "Red"
-            t_type_c = RED
+            t_c = RED
             do_targ_timer = True
             if dif == "easy":
               targ_timer_end = 45
@@ -1014,7 +1021,7 @@ while done == False:
           #purple
           elif (dif == "easy" and r in range(61,71)) or (dif == "med" and r in range(51,76)) or (dif == "hard" and r in range(44,76)) or (dif == "impos" and r in range(33,73)):
             t_type = "Purple"
-            t_type_c = PURPLE
+            t_c = PURPLE
             do_targ_timer = True
             if dif == "easy":
               targ_timer_end = 2
@@ -1027,7 +1034,7 @@ while done == False:
           #orange
           elif (dif == "easy" and r in range(71,81)) or (dif == "med" and r in range(76,84)) or (dif == "hard" and r in range(76,82)) or (dif == "impos" and r in range(73,76)):
             t_type = "Orange"
-            t_type_c = ORANGE
+            t_c = ORANGE
             do_targ_timer = True
             if dif == "easy":
               targ_timer_end = 12
@@ -1036,11 +1043,11 @@ while done == False:
             elif dif == "hard":
               targ_timer_end = 5
             elif dif == "impos":
-              targ_timer_end = 2
+              targ_timer_end = 2.5
           #green
           elif (dif == "easy" and r in range(81,91)) or (dif == "med" and r in range(84,91)) or (dif == "hard" and r in range(82,88)) or (dif == "impos" and r in range(76,79)):
             t_type = "Green"
-            t_type_c = DARKGREEN
+            t_c = DARKGREEN
             do_targ_timer = True
             if dif == "easy":
               targ_timer_end = 12
@@ -1049,11 +1056,11 @@ while done == False:
             elif dif == "hard":
               targ_timer_end = 5
             elif dif == "impos":
-              targ_timer_end = 2
+              targ_timer_end = 2.5
           #black
           elif (dif == "easy" and r in range(91,93)) or (dif == "med" and r in range(91,96)) or (dif == "hard" and r in range(88,98)) or (dif == "impos" and r in range(79,100)):
             t_type = "Black"
-            t_type_c = BLACK
+            t_c = BLACK
             do_targ_timer = True
             if dif == "easy":
               targ_timer_end = 2
@@ -1066,7 +1073,7 @@ while done == False:
           #yellow
           elif (dif == "easy" and r in range(93,101)) or (dif == "med" and r in range(96,101)) or (dif == "hard" and r in range(98,101)) or (dif == "impos" and r in range(100,101)):
             t_type = "Yellow"
-            t_type_c = YELLOW
+            t_c = YELLOW
             do_targ_timer = True
             if dif == "easy":
               targ_timer_end = 7
@@ -1079,28 +1086,28 @@ while done == False:
           #health
           if t_type != "Purple" and ((dif == "easy" and r2 in range(0,354)) or (dif == "med" and r2 in range(0,268)) or (dif == "hard" and r2 in range(0,222)) or (dif == "impos" and r2 in range(0,84))):
             t_type2 = "Pink"
-            t_type2_c = PINK
+            t_c2 = PINK
           #damage
           elif t_type == "Purple" and ((dif == "easy" and r2 in range(354,487)) or (dif == "med" and r2 in range(268,468)) or (dif == "hard" and r2 in range(222,535)) or (dif == "impos" and r2 in range(84,584))):
             t_type2 = "Light Purple"
-            t_type2_c = LILAC
+            t_c2 = LILAC
           #missile
           elif (dif == "easy" and r2 in range(487,737)) or (dif == "med" and r2 in range(468,618)) or (dif == "hard" and r2 in range(535,635)) or (dif == "impos" and r2 in range(584,634)):
             t_type2 = "Light Gray"
-            t_type2_c = LIGHTGRAY
+            t_c2 = LIGHTGRAY
           #missile2
           elif (dif == "easy" and r2 in range(737,787)) or (dif == "med" and r2 in range(618,638)) or (dif == "hard" and r2 in range(635,645)) or (dif == "impos" and r2 in range(634,639)):
             t_type2 = "Gray"
-            t_type2_c = GRAY
+            t_c2 = GRAY
           #none
           else:
             t_type2 = "White"
-            t_type2_c = WHITE
+            t_c2 = WHITE
         #draw
         if True:
-          pygame.draw.circle(screen,t_type_c,[t_x,t_y],15)
-          pygame.draw.circle(screen,t_type2_c,[t_x,t_y],10)
-          pygame.draw.circle(screen,t_type_c,[t_x,t_y],5)
+          pygame.draw.circle(screen,t_c,[t_x,t_y],15)
+          pygame.draw.circle(screen,t_c2,[t_x,t_y],10)
+          pygame.draw.circle(screen,t_c,[t_x,t_y],5)
         #properties
         if collide == True:
           if t_type == "Red":
@@ -1149,26 +1156,38 @@ while done == False:
           t_x = random.randrange(15,585)
           t_y = random.randrange(15,380)
           reset = False
-        #timer
-        if do_targ_timer == True and paused != 1:
-          targ_timer += 1
-          if targ_timer == (targ_timer_end * TICK):
-            do_targ_timer = False
-            targ_timer = 0
-            targ_timer_end = 0
-            reset = True
-        #damage timer
-        if do_hrttmr == True:
-          hrttmr += 1
-          if hrttmr % 2 == 0:
-            shake = -1
-          elif hrttmr % 2 == 1:
-            shake = 1
-          if hrttmr == 15:
-            do_hrttmr = False
-            hrttmr = 0
-            bclr = BLACK
-            shake = 0
+        #timers
+        if paused != 1:
+          #target timer
+          if do_targ_timer == True:
+            targ_timer += 1
+            if targ_timer == (targ_timer_end * TICK):
+              do_targ_timer = False
+              targ_timer = 0
+              targ_timer_end = 0
+              reset = True
+          #damage timer
+          if do_hrttmr == True:
+            hrttmr += 1
+            if hrttmr % 2 == 0:
+              shake = -1
+            elif hrttmr % 2 == 1:
+              shake = 1
+            if hrttmr == 15:
+              do_hrttmr = False
+              hrttmr = 0
+              bclr = BLACK
+              shake = 0
+          #target residue
+          for i in range(len(gt)):
+            if gt[i][3] == "Purple":
+              pygame.draw.circle(screen,[255,0,0,10],[gt[i][0],gt[i][1]],15)
+            else:
+              pygame.draw.circle(screen,[0,240,0,200],[gt[i][0],gt[i][1]],15)
+            gt[i][2] += 1
+            if gt[i][2] == 7:
+              del(gt[i])
+              break
 
       #gun
       if weapon == "gun":
@@ -1235,6 +1254,7 @@ while done == False:
           if blts[i][0] >= t_x-15 and blts[i][0] <= t_x+15 and blts[i][1] >= t_y-15 and blts[i][1] <= t_y+15:
             collide = True
             del blts[i]
+            gt.append([t_x,t_y,0,t_type])
             break
 
       #missles
@@ -1314,6 +1334,7 @@ while done == False:
                 if j in range(t_x-15,t_x+16) and k in range(t_y-15,t_y+16):
                   collide = True
                   del(msls[i])
+                  gt.append([t_x,t_y,0,t_type])
                   do_break = True
                   break
               if do_break == True:
@@ -1324,6 +1345,7 @@ while done == False:
                 if j in range(t_x-15,t_x+16) and k in range(t_y-15,t_y+16):
                   collide = True
                   del(msls[i])
+                  gt.append([t_x,t_y,0,t_type])
                   do_break = True
                   break
               if do_break == True:
@@ -1334,6 +1356,7 @@ while done == False:
                 if j in range(t_x-15,t_x+16) and k in range(t_y-15,t_y+16):
                   collide = True
                   del(msls[i])
+                  gt.append([t_x,t_y,0,t_type])
                   do_break = True
                   break
               if do_break == True:
@@ -1344,6 +1367,7 @@ while done == False:
                 if j in range(t_x-15,t_x+16) and k in range(t_y-15,t_y+16):
                   collide = True
                   del(msls[i])
+                  gt.append([t_x,t_y,0,t_type])
                   do_break = True
                   break
               if do_break == True:
@@ -1354,6 +1378,7 @@ while done == False:
                 if j in range(t_x-15,t_x+16) and k in range(t_y-15,t_y+16):
                   collide = True
                   del(msls[i])
+                  gt.append([t_x,t_y,0,t_type])
                   do_break = True
                   break
               if do_break == True:
@@ -1364,6 +1389,7 @@ while done == False:
                 if j in range(t_x-15,t_x+16) and k in range(t_y-15,t_y+16):
                   collide = True
                   del(msls[i])
+                  gt.append([t_x,t_y,0,t_type])
                   do_break = True
                   break
               if do_break == True:
