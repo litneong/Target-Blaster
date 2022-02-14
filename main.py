@@ -149,7 +149,7 @@ if True:
       pausesurf = pygame.Surface([600,400],pygame.SRCALPHA)
       pausesurf.fill([0,0,0,50])
       logo = bigfont.render("Target Blaster",True,RED)
-      statsurf = pygame.Surface([400,400],pygame.SRCALPHA)
+      statsurf = pygame.Surface([600,400],pygame.SRCALPHA)
       stattxt = smallfont.render("Press E to show stats",True,BLACK)
       stattxt.set_alpha(150)
       instrtxt = medfont.render("Instructions",True,WHITE)
@@ -291,7 +291,7 @@ if True:
           pygame.draw.circle(ptdesc,PURPLE,(50,85),10)
           ptdesc.blit(ptdescsub2,(3,120))
           ptdesc.blit(ptdescsub3,(20,140))
-          ptdesc.blit(ptdescsub3_2,(2,160))
+          ptdesc.blit(ptdescsub3_2,(12,160))
           ptdesc.blit(spctxt,(10,175))
           ptdesc.blit(ptdescsub4,(4,195))
           pygame.draw.line(ptdesc,BLACK,(99,0),(99,250))
@@ -299,7 +299,7 @@ if True:
         if True:
           otdesc = pygame.Surface([100,250],pygame.SRCALPHA)
           otdescsub1 = medsmlfont.render("Ornge",True,ORANGE)
-          otdescsub1_2 = smallfont2.render("10/8/6/3%",True,WHITE)
+          otdescsub1_2 = smallfont2.render("10/7/6/3%",True,WHITE)
           otdescsub2 = smallfont.render("Points: 1",True,WHITE)
           otdescsub3 = smallfont.render("Time:",True,WHITE)
           otdescsub3_2 = smallfont2.render("12/8.5/5/2.5s",True,WHITE)
@@ -322,12 +322,12 @@ if True:
         if True:
           gtdesc = pygame.Surface([100,250],pygame.SRCALPHA)
           gtdescsub1 = medsmlfont.render("Green",True,DARKGREEN)
-          gtdescsub1_2 = smallfont2.render("10/7/6/3%",True,WHITE)
+          gtdescsub1_2 = smallfont2.render("10/8/6/3%",True,WHITE)
           gtdescsub2 = smallfont.render("Points: 1",True,WHITE)
           gtdescsub3 = smallfont.render("Time:",True,WHITE)
           gtdescsub3_2 = smallfont2.render("12/8.5/5/2.5s",True,WHITE)
           gtdescsub4 = smallfont.render("Speed",True,WHITE)
-          gtdescsub5 = smallfont.render("+12 (p/s)",True,WHITE)
+          gtdescsub5 = smallfont.render("+6 (p/s)",True,WHITE)
           gtdesc.fill(INVIS)
           gtdesc.blit(gtdescsub1,(5,0))
           gtdesc.blit(gtdescsub1_2,(15,35))
@@ -339,7 +339,7 @@ if True:
           gtdesc.blit(gtdescsub3_2,(7,160))
           gtdesc.blit(spctxt,(10,175))
           gtdesc.blit(gtdescsub4,(17,195))
-          gtdesc.blit(gtdescsub5,(8,215))
+          gtdesc.blit(gtdescsub5,(11,215))
           pygame.draw.line(gtdesc,BLACK,(99,0),(99,250))
         #black
         if True:
@@ -358,7 +358,7 @@ if True:
           pygame.draw.circle(btdesc,BLACK,(50,85),10)
           btdesc.blit(btdescsub2,(3,120))
           btdesc.blit(btdescsub3,(20,140))
-          btdesc.blit(btdescsub3_2,(12,160))
+          btdesc.blit(btdescsub3_2,(17,160))
           btdesc.blit(spctxt,(10,175))
           btdesc.blit(btdescsub4,(9,195))
           pygame.draw.line(btdesc,BLACK,(99,0),(99,250))
@@ -391,14 +391,14 @@ if True:
           htdesc = pygame.Surface([120,250],pygame.SRCALPHA)
           htdescsub1 = medsmlfont.render("Pink",True,PINK)
           htdescsub2 = medsmlfont.render("Health",True,WHITE)
-          htdescsub3 = smallfont2.render("30/20/15/5%",True,WHITE)
+          htdescsub3 = smallfont2.render("30/20/15/7.5%",True,WHITE)
           htdescsub4 = smallfont.render("Health +1",True,WHITE)
           htdescsub5 = smallfont.render("(can't be on",True,WHITE)
           htdescsub6 = smallfont2.render("purple primary)",True,WHITE)
           htdesc.fill(INVIS)
           htdesc.blit(htdescsub1,(25,15))
           htdesc.blit(htdescsub2,(11,60))
-          htdesc.blit(htdescsub3,(20,90))
+          htdesc.blit(htdescsub3,(12,90))
           pygame.draw.circle(htdesc,RED,(60,140),30)
           pygame.draw.circle(htdesc,PINK,(60,140),20)
           pygame.draw.circle(htdesc,RED,(60,140),10)
@@ -475,13 +475,13 @@ if True:
           ntdesc = pygame.Surface([120,250],pygame.SRCALPHA)
           ntdescsub1 = medsmlfont.render("White",True,WHITE)
           ntdescsub2 = medsmlfont.render("None",True,WHITE)
-          ntdescsub3 = smallfont2.render("38/58/64/69.5%",True,WHITE)
+          ntdescsub3 = smallfont2.render("38/58/64/67%",True,WHITE)
           ntdescsub4 = smallfont.render("No added",True,WHITE)
           ntdescsub5 = smallfont.render("effects",True,WHITE)
           ntdesc.fill(INVIS)
           ntdesc.blit(ntdescsub1,(18,15))
           ntdesc.blit(ntdescsub2,(23,60))
-          ntdesc.blit(ntdescsub3,(7,90))
+          ntdesc.blit(ntdescsub3,(15,90))
           pygame.draw.circle(ntdesc,RED,(60,140),30)
           pygame.draw.circle(ntdesc,WHITE,(60,140),20)
           pygame.draw.circle(ntdesc,RED,(60,140),10)
@@ -529,7 +529,7 @@ if True:
           mslssurf.blit(mslssub1,(80,5))
           mslssurf.blit(mslssub2,(80,33))
         stinsurf1 = smallfont.render("Orange targets increase gun fire rate by 1 bullet per second,",True,WHITE)
-        stinsurf2 = smallfont.render("bullet movement speed by 6p/s, missile movement speed",True,WHITE)
+        stinsurf2 = smallfont.render("bullet movement speed by 6 p/s, missile movement speed",True,WHITE)
         stinsurf3 = smallfont.render("by 12 p/s, and missile fire rate by 0.1 missles per second.",True,WHITE)
       #help screen
       if True:
@@ -752,7 +752,8 @@ while done == False:
               if event.key == pygame.K_b:
                 blt_mspd += 3
                 blt_fspd += 10
-                msl_mspd += 2
+                msl_mspd += 6
+                msl_fspd += 1
               if event.key == pygame.K_v:
                 blt_mspd -= 3
                 blt_fspd -= 10
@@ -837,12 +838,14 @@ while done == False:
           if event.key == pygame.K_p:
             p_p = False
     
-    if score >= ptrq:
-      current_screen = "win"
-      show_stats = 0
-    if hlth <= 0:
-      current_screen = "game over"
-      show_stats = 0
+    #game end
+    if True:
+      if score >= ptrq:
+        current_screen = "win"
+        show_stats = 0
+      if hlth <= 0:
+        current_screen = "game over"
+        show_stats = 0
 
     #constant update variables
     if True:
@@ -854,56 +857,56 @@ while done == False:
       if s_lock == 1:
         move_speed *= 2
       atick = round(clock.get_fps(),1)
-      scoresurf = smallfont.render("Points: "+str(score),True,BLACK)
-      mslsurf = smallfont.render("Missles: "+str(msl),True,BLACK)
-      spdsurf = smallfont.render("Speed: "+str(round(move_speed*TICK))+"p/s",True,BLACK)
+      scorestat = smallfont.render("Points: "+str(score),True,BLACK)
+      mslstat = smallfont.render("Missiles: "+str(msl),True,BLACK)
+      spdstat = smallfont.render("Speed: "+str(round(move_speed*TICK))+"p/s",True,BLACK)
       if s_lock == 1:
-        slcksurf = smallfont.render("Speed lock: On",True,BLACK)
+        slckstat = smallfont.render("Speed lock: On",True,BLACK)
       elif s_lock == -1:
-        slcksurf = smallfont.render("Speed lock: Off",True,BLACK)
-      bmssurf = smallfont.render("Bullet movement speed: "+str(round(blt_mspd*TICK))+"p/s",True,BLACK)
-      bfssurf = smallfont.render("Bullet fire rate: "+str(blt_fspd*(TICK/60))+"/s",True,BLACK)
-      mmssurf = smallfont.render("Missile movement speed: "+str(round(msl_mspd*TICK))+"p/s",True,BLACK)
-      mfssurf = smallfont.render("Missile fire rate: "+str(round(msl_fspd,1)*(TICK/60))+"/s",True,BLACK)
-      mrfsurf = smallfont.render("Missile refill per target: "+str(msl_rf),True,BLACK)
-      countsurf = smallfont.render("Targets until next wall: "+str(5-count),True,BLACK)
-      targsurf = smallfont.render("Current target types: "+t_type+","+t_type2,True,BLACK)
-      tartmsurf = smallfont.render("Time left for target: "+str(round(((targ_timer_end*TICK)-targ_timer)/TICK,1))+"s",True,BLACK)
-      mfpssurf = smallfont.render("Optimal framerate: "+str(TICK)+"fps",True,BLACK)
-      afpssurf = smallfont.render("Current framerate: "+str(atick)+"("+str(round((atick/TICK)*100,1))+"%)fps",True,BLACK)
+        slckstat = smallfont.render("Speed lock: Off",True,BLACK)
+      bmsstat = smallfont.render("Bullet movement speed: "+str(round(blt_mspd*TICK))+"p/s",True,BLACK)
+      bfsstat = smallfont.render("Bullet fire rate: "+str(blt_fspd*(TICK/60))+"/s",True,BLACK)
+      mmsstat = smallfont.render("Missile movement speed: "+str(round(msl_mspd*TICK))+"p/s",True,BLACK)
+      mfsstat = smallfont.render("Missile fire rate: "+str(round(msl_fspd,1)*(TICK/60))+"/s",True,BLACK)
+      mrfstat = smallfont.render("Missile refill rate: "+str(msl_rf),True,BLACK)
+      countstat = smallfont.render("Targets until next wall: "+str(5-count),True,BLACK)
+      targstat = smallfont.render("Current target types: "+t_type+","+t_type2,True,BLACK)
+      tartmstat = smallfont.render("Time left for target: "+str(round(((targ_timer_end*TICK)-targ_timer)/TICK,1))+"s",True,BLACK)
+      mfpsstat = smallfont.render("Optimal framerate: "+str(TICK)+"fps",True,BLACK)
+      afpsstat = smallfont.render("Current framerate: "+str(atick)+"("+str(round((atick/TICK)*100,1))+"%)fps",True,BLACK)
       if dif == "med":
-        difsurf = smallfont.render("Difficulty: normal",True,BLACK)
+        difstat = smallfont.render("Difficulty: normal",True,BLACK)
       elif dif == "impos":
-        difsurf = smallfont.render("Difficulty: impossible",True,BLACK)
+        difstat = smallfont.render("Difficulty: impossible",True,BLACK)
       else:
-        difsurf = smallfont.render("Difficulty: "+dif,True,BLACK)
+        difstat = smallfont.render("Difficulty: "+dif,True,BLACK)
       if hlth > max_hlth:
         hlth -=1
       #stats
       if True:
         statsurf.fill(INVIS)
         statsurf.set_alpha(150)
-        statsurf.blit(spdsurf,(254,0))
-        statsurf.blit(slcksurf,(208,20))
-        statsurf.blit(bmssurf,(84,40))
-        statsurf.blit(bfssurf,(175,60))
-        statsurf.blit(mmssurf,(71,80))
-        statsurf.blit(mfssurf,(162,100))
-        statsurf.blit(mrfsurf,(92,120))
-        statsurf.blit(countsurf,(97,140))
+        statsurf.blit(spdstat,(454,0))
+        statsurf.blit(slckstat,(408,20))
+        statsurf.blit(bmsstat,(284,40))
+        statsurf.blit(bfsstat,(375,60))
+        statsurf.blit(mmsstat,(271,80))
+        statsurf.blit(mfsstat,(362,100))
+        statsurf.blit(mrfstat,(349,120))
+        statsurf.blit(countstat,(297,140))
         if dif == "impos":
-          statsurf.blit(difsurf,(188,160))
+          statsurf.blit(difstat,(388,160))
         else:
-          statsurf.blit(difsurf,(223,160))
-        statsurf.blit(tartmsurf,(132,180))
+          statsurf.blit(difstat,(423,160))
+        statsurf.blit(tartmstat,(332,180))
         if t_type2 == "Light Purple":
-          statsurf.blit(targsurf,(0,200)) 
+          statsurf.blit(targstat,(195,200)) 
         elif t_type2 == "Light Gray":
-          statsurf.blit(targsurf,(15,200))
+          statsurf.blit(targstat,(215,200))
         else:
-          statsurf.blit(targsurf,(47,200))
-        statsurf.blit(mfpssurf,(132,355-hlth_offset))
-        statsurf.blit(afpssurf,(60,375-hlth_offset))
+          statsurf.blit(targstat,(247,200))
+        statsurf.blit(mfpsstat,(332,355-hlth_offset))
+        statsurf.blit(afpsstat,(260,375-hlth_offset))
       #hud
       if True:
         hud.set_alpha(230)
@@ -930,11 +933,11 @@ while done == False:
           if h_ox > 595:
             h_ox = 5
             h_oy += 30
-        hud.blit(scoresurf,(5,hlth_offset))
-        hud.blit(mslsurf,(5,hlth_offset+20))
+        hud.blit(scorestat,(5,hlth_offset))
+        hud.blit(mslstat,(5,hlth_offset+20))
         #stats
         if show_stats == 1:
-          hud.blit(statsurf,(200,hlth_offset))
+          hud.blit(statsurf,(0,hlth_offset))
         elif show_stats == -1:
           hud.blit(stattxt,(380,hlth_offset))
 
@@ -1032,7 +1035,7 @@ while done == False:
             elif dif == "impos":
               targ_timer_end = 4.5
           #orange
-          elif (dif == "easy" and r in range(71,81)) or (dif == "med" and r in range(76,84)) or (dif == "hard" and r in range(76,82)) or (dif == "impos" and r in range(73,76)):
+          elif (dif == "easy" and r in range(71,81)) or (dif == "med" and r in range(76,83)) or (dif == "hard" and r in range(76,82)) or (dif == "impos" and r in range(73,76)):
             t_type = "Orange"
             t_c = ORANGE
             do_targ_timer = True
@@ -1045,7 +1048,7 @@ while done == False:
             elif dif == "impos":
               targ_timer_end = 2.5
           #green
-          elif (dif == "easy" and r in range(81,91)) or (dif == "med" and r in range(84,91)) or (dif == "hard" and r in range(82,88)) or (dif == "impos" and r in range(76,79)):
+          elif (dif == "easy" and r in range(81,91)) or (dif == "med" and r in range(83,91)) or (dif == "hard" and r in range(82,88)) or (dif == "impos" and r in range(76,79)):
             t_type = "Green"
             t_c = DARKGREEN
             do_targ_timer = True
@@ -1084,19 +1087,19 @@ while done == False:
             elif dif == "impos":
               targ_timer_end = 1.5
           #health
-          if t_type != "Purple" and ((dif == "easy" and r2 in range(0,354)) or (dif == "med" and r2 in range(0,268)) or (dif == "hard" and r2 in range(0,222)) or (dif == "impos" and r2 in range(0,84))):
+          if t_type != "Purple" and ((dif == "easy" and r2 in range(0,354)) or (dif == "med" and r2 in range(0,268)) or (dif == "hard" and r2 in range(0,222)) or (dif == "impos" and r2 in range(0,126))):
             t_type2 = "Pink"
             t_c2 = PINK
           #damage
-          elif t_type == "Purple" and ((dif == "easy" and r2 in range(354,487)) or (dif == "med" and r2 in range(268,468)) or (dif == "hard" and r2 in range(222,535)) or (dif == "impos" and r2 in range(84,584))):
+          elif t_type == "Purple" and ((dif == "easy" and r2 in range(354,487)) or (dif == "med" and r2 in range(268,468)) or (dif == "hard" and r2 in range(222,535)) or (dif == "impos" and r2 in range(126,626))):
             t_type2 = "Light Purple"
             t_c2 = LILAC
           #missile
-          elif (dif == "easy" and r2 in range(487,737)) or (dif == "med" and r2 in range(468,618)) or (dif == "hard" and r2 in range(535,635)) or (dif == "impos" and r2 in range(584,634)):
+          elif (dif == "easy" and r2 in range(487,737)) or (dif == "med" and r2 in range(468,618)) or (dif == "hard" and r2 in range(535,635)) or (dif == "impos" and r2 in range(626,676)):
             t_type2 = "Light Gray"
             t_c2 = LIGHTGRAY
           #missile2
-          elif (dif == "easy" and r2 in range(737,787)) or (dif == "med" and r2 in range(618,638)) or (dif == "hard" and r2 in range(635,645)) or (dif == "impos" and r2 in range(634,639)):
+          elif (dif == "easy" and r2 in range(737,787)) or (dif == "med" and r2 in range(618,638)) or (dif == "hard" and r2 in range(635,645)) or (dif == "impos" and r2 in range(676,681)):
             t_type2 = "Gray"
             t_c2 = GRAY
           #none
@@ -1180,12 +1183,12 @@ while done == False:
               shake = 0
           #target residue
           for i in range(len(gt)):
-            if gt[i][3] == "Purple":
-              pygame.draw.circle(screen,[255,0,0,10],[gt[i][0],gt[i][1]],15)
+            if gt[i][3] == "Purple" or gt[i][3] == "Black":
+              pygame.draw.circle(screen,[225,0,0,25],[gt[i][0],gt[i][1]],15)
             else:
-              pygame.draw.circle(screen,[0,240,0,200],[gt[i][0],gt[i][1]],15)
+              pygame.draw.circle(screen,[0,240,0,100],[gt[i][0],gt[i][1]],15)
             gt[i][2] += 1
-            if gt[i][2] == 7:
+            if gt[i][2] == 10:
               del(gt[i])
               break
 
@@ -1553,9 +1556,9 @@ while done == False:
     winsurf.fill(fadewhite)
     winsurf.blit(hud,(0,0))
     if dif == "impos":
-      winsurf.blit(difsurf,(388,hlth_offset))
+      winsurf.blit(difstat,(388,hlth_offset))
     else:
-      winsurf.blit(difsurf,(423,hlth_offset))
+      winsurf.blit(difstat,(423,hlth_offset))
     winsurf.blit(winsubsurf,(150,150))
     winsurf.blit(resurf,(70,225))
     winsurf.blit(yessurf,(100,275))
@@ -1582,9 +1585,9 @@ while done == False:
     gmovsurf.fill(fadeblack)
     gmovsurf.blit(hud,(0,0))
     if dif == "impos":
-      gmovsurf.blit(difsurf,(388,hlth_offset))
+      gmovsurf.blit(difstat,(388,hlth_offset))
     else:
-      gmovsurf.blit(difsurf,(423,hlth_offset))
+      gmovsurf.blit(difstat,(423,hlth_offset))
     gmovsurf.blit(gmovsubsurf,(100,150))
     gmovsurf.blit(resurf,(70,225))
     gmovsurf.blit(yessurf,(100,275))
@@ -1609,7 +1612,7 @@ while done == False:
     blt_fspd = 10
     msl = 0
     msls = []
-    msl_mspd = 5
+    msl_mspd = 6
     msl_fspd = 1
     msl_rf = 1
     fire_timer_m = 0
