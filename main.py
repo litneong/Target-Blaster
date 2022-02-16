@@ -19,27 +19,21 @@ if True:
       LIGHTGRAY = (200,200,200)
       DARKGRAY = (75,75,75)
       RED = (255,0,0)
-      MAROON = (100,0,0)
       PINK = (255,150,150)
       GREEN = (0,255,0)
       DARKGREEN = (0,200,0)
       BLUE = (0,0,255)
-      DARKBLUE = (0,0,100)
       YELLOW = (255,255,0)
       PURPLE = (175,0,200)
       LILAC = (220,70,255)
       ORANGE = (255,150,0)
-      SKYBLUE = (0,150,255)
-      BROWN = (120,70,0)
       INVIS = (255,255,255,0)
-      fadeblack = [10,10,10,0]
-      fadewhite = [255,255,255,0]
   #variables
   if True:
     #movement
     if True:
-      x = 300
-      y = 200
+      x = 450
+      y = 300
       move_up = "no"
       move_down = "no"
       move_right = "no"
@@ -81,8 +75,8 @@ if True:
       collide = False
       r = random.randint(0,100)
       r2 = random.randint(0,1000)
-      t_x = random.randrange(15,585)
-      t_y = random.randrange(15,380)
+      t_x = random.randrange(15,885)
+      t_y = random.randrange(15,580)
       targ_timer = 0
       do_targ_timer = False
       targ_timer_end = 0
@@ -105,6 +99,8 @@ if True:
       do_hrttmr = False
       shake = 0
       do_break = False
+      fadeblack = [10,10,10,0]
+      fadewhite = [255,255,255,0]
   #misc.
   if True:
     #game
@@ -118,435 +114,361 @@ if True:
         pygame.draw.circle(icon,RED,(15,15),5)
         pygame.display.set_icon(icon)
       flags = pygame.SRCALPHA|pygame.RESIZABLE|pygame.SCALED
-      display = pygame.display.set_mode((600,400),flags)
-      screen = pygame.Surface([600,400],pygame.SRCALPHA)
+      size = [900,600]
+      display = pygame.display.set_mode(size,pygame.SRCALPHA|pygame.RESIZABLE|pygame.SCALED)
+      screen = pygame.Surface(size,pygame.SRCALPHA)
       pygame.display.set_caption("Target Blaster")
       clock = pygame.time.Clock()
       pygame.event.set_blocked(pygame.MOUSEMOTION)
       current_screen = "menu"
       prev_screen = ""
-      dif = "med"
+      dif = ""
     #fonts
     if True:
-      tinyfont = pygame.font.SysFont("freesansbold",20)
       smallfont2 = pygame.font.SysFont("freesansbold",22)
       smallfont = pygame.font.SysFont("freesansbold",30)
-      medsmlfont2 = pygame.font.SysFont("freesansbold",40)
       medsmlfont = pygame.font.SysFont("freesansbold",45)
       medfont = pygame.font.SysFont("freesansbold",65)
-      medbigfont = pygame.font.SysFont("freesansbold",80)
       bigfont = pygame.font.SysFont("freesansbold",100)
     #surfaces/images
     if True:
-      hud = pygame.Surface([600,400],pygame.SRCALPHA)
-      hud.set_alpha(230)
-      gmovsurf = pygame.Surface([600,400],pygame.SRCALPHA)
-      gmovsubsurf = bigfont.render("Game Over",True,RED)
+      hud = pygame.Surface(size,pygame.SRCALPHA)
+      hud.set_alpha(200)
+      gmovsurf = pygame.Surface(size,pygame.SRCALPHA)
       resurf = medsmlfont.render("Play again with these settings?",True,DARKGRAY)
-      winsurf = pygame.Surface([600,400],pygame.SRCALPHA)
-      winsubsurf = bigfont.render("You win!",True,YELLOW)
-      pausetxt = medfont.render("Paused",True,WHITE)
-      pausesurf = pygame.Surface([600,400],pygame.SRCALPHA)
-      pausesurf.fill([0,0,0,50])
-      logo = bigfont.render("Target Blaster",True,RED)
-      statsurf = pygame.Surface([600,400],pygame.SRCALPHA)
-      stattxt = smallfont.render("Press E to show stats",True,BLACK)
-      stattxt.set_alpha(150)
-      instrtxt = medfont.render("Instructions",True,WHITE)
+      winsurf = pygame.Surface(size,pygame.SRCALPHA)
+      logo = pygame.font.SysFont("freesansbold",150).render("Target Blaster",True,RED)
+      statsurf = pygame.Surface(size,pygame.SRCALPHA)
+      stattxt = smallfont.render("Press E to show stats",True,[0,0,0,150])
       keytxt = medfont.render("Target Key",True,WHITE)
-      prmtxt = medsmlfont.render("Primary Color",True,WHITE)
-      scdtxt = medsmlfont.render("Secondary Color",True,WHITE)
-      diftxt = medbigfont.render("Select Difficulty",True,BLACK)
-      #expressions
-      if True:
-        exprtxt = medfont.render("Expressions",True,WHITE)
-        p_s_txt = smallfont.render("p/s: pixels per second",True,WHITE)
-        divtxt = smallfont.render("#/#/#/#: easy/normal/hard/impossible (difficulty)",True,WHITE)
       #buttons
       if True:
         #yes
         if True:
           yessurf = pygame.Surface([100,50])
-          yestxt = medfont.render("YES",True,BLACK)
           yessurf.fill(BLACK)
           pygame.draw.rect(yessurf,WHITE,[5,5,90,40])
-          yessurf.blit(yestxt,(6,5))
+          yessurf.blit(medfont.render("YES",True,BLACK),(6,5))
         #no
         if True:
           nosurf = pygame.Surface([100,50])
-          notxt = medfont.render("NO",True,BLACK)
           nosurf.fill(BLACK)
           pygame.draw.rect(nosurf,WHITE,[5,5,90,40])
-          nosurf.blit(notxt,(17,5))
+          nosurf.blit(medfont.render("NO",True,BLACK),(17,5))
         #play
         if True:
           playsurf = pygame.Surface([140,50])
-          playtxt = medfont.render("PLAY",True,BLACK)
           playsurf.fill(BLACK)
           pygame.draw.rect(playsurf,WHITE,[5,5,130,40])
-          playsurf.blit(playtxt,(12,5))
+          playsurf.blit(medfont.render("PLAY",True,BLACK),(12,5))
+          playsurf = pygame.transform.scale(playsurf,(210,75))
         #help
         if True:
           helpsurf = pygame.Surface([140,50])
-          helptxt = medfont.render("HELP",True,BLACK)
           helpsurf.fill(BLACK)
           pygame.draw.rect(helpsurf,WHITE,[5,5,130,40])
-          helpsurf.blit(helptxt,(12,5))
+          helpsurf.blit(medfont.render("HELP",True,BLACK),(12,5))
+          helpbtn = pygame.transform.scale(helpsurf,(210,75))
         #menu
         if True:
           menusurf = pygame.Surface([140,50])
-          menutxt = medfont.render("MENU",True,BLACK)
           menusurf.fill(BLACK)
           pygame.draw.rect(menusurf,WHITE,[5,5,130,40])
-          menusurf.blit(menutxt,(5,5))
+          menusurf.blit(medfont.render("MENU",True,BLACK),(5,5))
         #back
         if True:
           backsurf = pygame.Surface([140,50])
-          backtxt = medfont.render("BACK",True,BLACK)
           backsurf.fill(BLACK)
           pygame.draw.rect(backsurf,WHITE,[5,5,130,40])
-          backsurf.blit(backtxt,(5,5))
+          backsurf.blit(medfont.render("BACK",True,BLACK),(5,5))
+          backsurf = pygame.transform.scale(backsurf,(210,75))
         #next
         if True:
           nextsurf = pygame.Surface([140,50])
-          nexttxt = medfont.render("NEXT",True,BLACK)
           nextsurf.fill(BLACK)
           pygame.draw.rect(nextsurf,WHITE,[5,5,130,40])
-          nextsurf.blit(nexttxt,(8,5))
+          nextsurf.blit(medfont.render("NEXT",True,BLACK),(8,5))
+          nextsurf = pygame.transform.scale(nextsurf,(210,75))
         #prev
         if True:
           prevsurf = pygame.Surface([140,50])
-          prevtxt = medfont.render("PREV",True,BLACK)
           prevsurf.fill(BLACK)
           pygame.draw.rect(prevsurf,WHITE,[5,5,130,40])
-          prevsurf.blit(prevtxt,(5,5))
+          prevsurf.blit(medfont.render("PREV",True,BLACK),(5,5))
+          prevsurf = pygame.transform.scale(prevsurf,(210,75))
         #difficulty
         if True:
           #easy
           if True:
             easysurf = pygame.Surface([200,50])
-            easytxt = medfont.render("EASY",True,BLACK)
             easysurf.fill(BLACK)
             pygame.draw.rect(easysurf,DARKGREEN,[5,5,190,40])
-            easysurf.blit(easytxt,(37,5))
+            easysurf.blit(medfont.render("EASY",True,BLACK),(37,5))
+            easysurf = pygame.transform.scale(easysurf,(300,75))
           #normal/medium
           if True:
             medsurf = pygame.Surface([200,50])
-            medtxt = medfont.render("NORMAL",True,BLACK)
             medsurf.fill(BLACK)
             pygame.draw.rect(medsurf,YELLOW,[5,5,190,40])
-            medsurf.blit(medtxt,(5,5))
+            medsurf.blit(medfont.render("NORMAL",True,BLACK),(5,5))
+            medsurf = pygame.transform.scale(medsurf,(300,75))
           #hard
           if True:
             hardsurf = pygame.Surface([200,50])
-            hardtxt = medfont.render("HARD",True,BLACK)
             hardsurf.fill(BLACK)
             pygame.draw.rect(hardsurf,RED,[5,5,190,40])
-            hardsurf.blit(hardtxt,(35,5))
+            hardsurf.blit(medfont.render("HARD",True,BLACK),(35,5))
+            hardsurf = pygame.transform.scale(hardsurf,(300,75))
           #impossible
           if True:
             impossurf = pygame.Surface([290,50])
-            impostxt = medfont.render("IMPOSSIBLE",True,BLACK)
             impossurf.fill(BLACK)
-            pygame.draw.rect(impossurf,MAROON,[5,5,280,40])
-            impossurf.blit(impostxt,(8,5))
+            pygame.draw.rect(impossurf,(100,0,0),[5,5,280,40])
+            impossurf.blit(medfont.render("IMPOSSIBLE",True,BLACK),(8,5))
+            impossurf = pygame.transform.scale(impossurf,(435,75))
       #target descriptions
       if True:
         spctxt = smallfont.render("Special:",True,WHITE)
         #red
         if True:
           rtdesc = pygame.Surface([100,250],pygame.SRCALPHA)
-          rtdescsub1 = medsmlfont.render("Red",True,RED)
-          rtdescsub1_2 = smallfont2.render("60/50/43/32%",True,WHITE)
-          rtdescsub2 = smallfont.render("Points: 2",True,WHITE)
-          rtdescsub3 = smallfont.render("Time:",True,WHITE)
-          rtdescsub3_2 = smallfont2.render("45/30/20/5s",True,WHITE)
-          rtdescsub4 = smallfont.render("None",True,WHITE)
           rtdesc.fill(INVIS)
-          rtdesc.blit(rtdescsub1,(20,0))
-          rtdesc.blit(rtdescsub1_2,(5,35))
+          rtdesc.blit(medsmlfont.render("Red",True,RED),(20,0))
+          rtdesc.blit(smallfont2.render("60/50/43/32%",True,WHITE),(5,35))
           pygame.draw.circle(rtdesc,RED,(50,85),30)
           pygame.draw.circle(rtdesc,WHITE,(50,85),20)
           pygame.draw.circle(rtdesc,RED,(50,85),10)
-          rtdesc.blit(rtdescsub2,(5,120))
-          rtdesc.blit(rtdescsub3,(20,140))
-          rtdesc.blit(rtdescsub3_2,(10,160))
+          rtdesc.blit(smallfont.render("Points: 2",True,WHITE),(5,120))
+          rtdesc.blit(smallfont.render("Time:",True,WHITE),(20,140))
+          rtdesc.blit(smallfont2.render("45/30/20/5s",True,WHITE),(10,160))
           rtdesc.blit(spctxt,(10,175))
-          rtdesc.blit(rtdescsub4,(25,195))
+          rtdesc.blit(smallfont.render("None",True,WHITE),(25,195))
           pygame.draw.line(rtdesc,BLACK,(99,0),(99,250))
         #purple
         if True:
           ptdesc = pygame.Surface([100,250],pygame.SRCALPHA)
-          ptdescsub1 = medsmlfont.render("Purple",True,PURPLE)
-          ptdescsub1_2 = smallfont2.render("15/25/32/40%",True,WHITE)
-          ptdescsub2 = smallfont.render("Points: -5",True,WHITE)
-          ptdescsub3 = smallfont.render("Time:",True,WHITE)
-          ptdescsub3_2 = smallfont2.render("2/3.3/4/4.5s",True,WHITE)
-          ptdescsub4 = smallfont.render("-1 Health",True,WHITE)
           ptdesc.fill(INVIS)
-          ptdesc.blit(ptdescsub1,(1,0))
-          ptdesc.blit(ptdescsub1_2,(5,35))
+          ptdesc.blit(medsmlfont.render("Purple",True,PURPLE),(1,0))
+          ptdesc.blit(smallfont2.render("15/25/32/40%",True,WHITE),(5,35))
           pygame.draw.circle(ptdesc,PURPLE,(50,85),30)
           pygame.draw.circle(ptdesc,WHITE,(50,85),20)
           pygame.draw.circle(ptdesc,PURPLE,(50,85),10)
-          ptdesc.blit(ptdescsub2,(3,120))
-          ptdesc.blit(ptdescsub3,(20,140))
-          ptdesc.blit(ptdescsub3_2,(12,160))
+          ptdesc.blit(smallfont.render("Points: -5",True,WHITE),(3,120))
+          ptdesc.blit(smallfont.render("Time:",True,WHITE),(20,140))
+          ptdesc.blit(smallfont2.render("2/3.3/4/4.5s",True,WHITE),(12,160))
           ptdesc.blit(spctxt,(10,175))
-          ptdesc.blit(ptdescsub4,(4,195))
+          ptdesc.blit(smallfont.render("-1 Health",True,WHITE),(4,195))
           pygame.draw.line(ptdesc,BLACK,(99,0),(99,250))
         #orange
         if True:
           otdesc = pygame.Surface([100,250],pygame.SRCALPHA)
-          otdescsub1 = medsmlfont.render("Ornge",True,ORANGE)
-          otdescsub1_2 = smallfont2.render("10/7/6/3%",True,WHITE)
-          otdescsub2 = smallfont.render("Points: 1",True,WHITE)
-          otdescsub3 = smallfont.render("Time:",True,WHITE)
-          otdescsub3_2 = smallfont2.render("12/8.5/5/2.5s",True,WHITE)
-          otdescsub4 = smallfont.render("Weapons",True,WHITE)
-          otdescsub5 = smallfont.render("(see P4)",True,WHITE)
           otdesc.fill(INVIS)
-          otdesc.blit(otdescsub1,(3,0))
-          otdesc.blit(otdescsub1_2,(15,35))
+          otdesc.blit(medsmlfont.render("Ornge",True,ORANGE),(3,0))
+          otdesc.blit(smallfont2.render("10/7/6/3%",True,WHITE),(15,35))
           pygame.draw.circle(otdesc,ORANGE,(50,85),30)
           pygame.draw.circle(otdesc,WHITE,(50,85),20)
           pygame.draw.circle(otdesc,ORANGE,(50,85),10)
-          otdesc.blit(otdescsub2,(5,120))
-          otdesc.blit(otdescsub3,(20,140))
-          otdesc.blit(otdescsub3_2,(7,160))
+          otdesc.blit(smallfont.render("Points: 1",True,WHITE),(5,120))
+          otdesc.blit(smallfont.render("Time:",True,WHITE),(20,140))
+          otdesc.blit(smallfont2.render("12/8.5/5/2.5s",True,WHITE),(7,160))
           otdesc.blit(spctxt,(10,175))
-          otdesc.blit(otdescsub4,(5,195))
-          otdesc.blit(otdescsub5,(10,215))
+          otdesc.blit(smallfont.render("Weapons",True,WHITE),(5,195))
+          otdesc.blit(smallfont.render("(see P4)",True,WHITE),(10,215))
           pygame.draw.line(otdesc,BLACK,(99,0),(99,250))
         #green
         if True:
           gtdesc = pygame.Surface([100,250],pygame.SRCALPHA)
-          gtdescsub1 = medsmlfont.render("Green",True,DARKGREEN)
-          gtdescsub1_2 = smallfont2.render("10/8/6/3%",True,WHITE)
-          gtdescsub2 = smallfont.render("Points: 1",True,WHITE)
-          gtdescsub3 = smallfont.render("Time:",True,WHITE)
-          gtdescsub3_2 = smallfont2.render("12/8.5/5/2.5s",True,WHITE)
-          gtdescsub4 = smallfont.render("Speed",True,WHITE)
-          gtdescsub5 = smallfont.render("+6 (p/s)",True,WHITE)
           gtdesc.fill(INVIS)
-          gtdesc.blit(gtdescsub1,(5,0))
-          gtdesc.blit(gtdescsub1_2,(15,35))
+          gtdesc.blit(medsmlfont.render("Green",True,DARKGREEN),(5,0))
+          gtdesc.blit(smallfont2.render("10/8/6/3%",True,WHITE),(15,35))
           pygame.draw.circle(gtdesc,DARKGREEN,(50,85),30)
           pygame.draw.circle(gtdesc,WHITE,(50,85),20)
           pygame.draw.circle(gtdesc,DARKGREEN,(50,85),10)
-          gtdesc.blit(gtdescsub2,(5,120))
-          gtdesc.blit(gtdescsub3,(20,140))
-          gtdesc.blit(gtdescsub3_2,(7,160))
+          gtdesc.blit(smallfont.render("Points: 1",True,WHITE),(5,120))
+          gtdesc.blit(smallfont.render("Time:",True,WHITE),(20,140))
+          gtdesc.blit(smallfont2.render("12/8.5/5/2.5s",True,WHITE),(7,160))
           gtdesc.blit(spctxt,(10,175))
-          gtdesc.blit(gtdescsub4,(17,195))
-          gtdesc.blit(gtdescsub5,(11,215))
+          gtdesc.blit(smallfont.render("Speed",True,WHITE),(17,195))
+          gtdesc.blit(smallfont.render("+6 (p/s)",True,WHITE),(11,215))
           pygame.draw.line(gtdesc,BLACK,(99,0),(99,250))
         #black
         if True:
           btdesc = pygame.Surface([100,250],pygame.SRCALPHA)
-          btdescsub1 = medsmlfont.render("Black",True,BLACK)
-          btdescsub1_2 = smallfont2.render("2/5/10/20%",True,WHITE)
-          btdescsub2 = smallfont.render("Points: -5",True,WHITE)
-          btdescsub3 = smallfont.render("Time:",True,WHITE)
-          btdescsub3_2 = smallfont2.render("2/3/3.4/4s",True,WHITE)
-          btdescsub4 = smallfont.render("+5 walls",True,WHITE)
           btdesc.fill(INVIS)
-          btdesc.blit(btdescsub1,(7,0))
-          btdesc.blit(btdescsub1_2,(15,35))
+          btdesc.blit(medsmlfont.render("Black",True,BLACK),(7,0))
+          btdesc.blit(smallfont2.render("2/5/10/20%",True,WHITE),(15,35))
           pygame.draw.circle(btdesc,BLACK,(50,85),30)
           pygame.draw.circle(btdesc,WHITE,(50,85),20)
           pygame.draw.circle(btdesc,BLACK,(50,85),10)
-          btdesc.blit(btdescsub2,(3,120))
-          btdesc.blit(btdescsub3,(20,140))
-          btdesc.blit(btdescsub3_2,(17,160))
+          btdesc.blit(smallfont.render("Points: -5",True,WHITE),(3,120))
+          btdesc.blit(smallfont.render("Time:",True,WHITE),(20,140))
+          btdesc.blit(smallfont2.render("2/3/3.4/4s",True,WHITE),(17,160))
           btdesc.blit(spctxt,(10,175))
-          btdesc.blit(btdescsub4,(9,195))
+          btdesc.blit(smallfont.render("+5 walls",True,WHITE),(9,195))
           pygame.draw.line(btdesc,BLACK,(99,0),(99,250))
         #yellow
         if True:
           ytdesc = pygame.Surface([100,270],pygame.SRCALPHA)
-          ytdescsub1 = medsmlfont.render("Yellow",True,YELLOW)
-          ytdescsub1_2 = smallfont2.render("8/5/3/1%",True,WHITE)
-          ytdescsub2 = smallfont.render("Points: 10",True,WHITE)
-          ytdescsub3 = smallfont.render("Time:",True,WHITE)
-          ytdescsub3_2 = smallfont2.render("7/3.5/2.5/1.5s",True,WHITE)
-          ytdescsub4 = smallfont.render("+1 Health",True,WHITE)
-          ytdescsub5 = smallfont.render("and Max",True,WHITE)
-          ytdescsub6 = smallfont.render("Health",True,WHITE)
           ytdesc.fill(INVIS)
-          ytdesc.blit(ytdescsub1,(2,0))
-          ytdesc.blit(ytdescsub1_2,(25,35))
+          ytdesc.blit(medsmlfont.render("Yellow",True,YELLOW),(2,0))
+          ytdesc.blit(smallfont2.render("8/5/3/1%",True,WHITE),(25,35))
           pygame.draw.circle(ytdesc,YELLOW,(50,85),30)
           pygame.draw.circle(ytdesc,WHITE,(50,85),20)
           pygame.draw.circle(ytdesc,YELLOW,(50,85),10)
-          ytdesc.blit(ytdescsub2,(1,120))
-          ytdesc.blit(ytdescsub3,(20,140))
-          ytdesc.blit(ytdescsub3_2,(1,160))
+          ytdesc.blit(smallfont.render("Points: 10",True,WHITE),(1,120))
+          ytdesc.blit(smallfont.render("Time:",True,WHITE),(20,140))
+          ytdesc.blit(smallfont2.render("7/3.5/2.5/1.5s",True,WHITE),(1,160))
           ytdesc.blit(spctxt,(10,175))
-          ytdesc.blit(ytdescsub4,(3,195))
-          ytdesc.blit(ytdescsub5,(10,215))
-          ytdesc.blit(ytdescsub6,(20,235))
+          ytdesc.blit(smallfont.render("+1 Health",True,WHITE),(3,195))
+          ytdesc.blit(smallfont.render("and Max",True,WHITE),(10,215))
+          ytdesc.blit(smallfont.render("Health",True,WHITE),(20,235))
         #health
         if True:
           htdesc = pygame.Surface([120,250],pygame.SRCALPHA)
-          htdescsub1 = medsmlfont.render("Pink",True,PINK)
-          htdescsub2 = medsmlfont.render("Health",True,WHITE)
-          htdescsub3 = smallfont2.render("30/20/15/7.5%",True,WHITE)
-          htdescsub4 = smallfont.render("Health +1",True,WHITE)
-          htdescsub5 = smallfont.render("(can't be on",True,WHITE)
-          htdescsub6 = smallfont2.render("purple primary)",True,WHITE)
           htdesc.fill(INVIS)
-          htdesc.blit(htdescsub1,(25,15))
-          htdesc.blit(htdescsub2,(11,60))
-          htdesc.blit(htdescsub3,(12,90))
+          htdesc.blit(medsmlfont.render("Pink",True,PINK),(25,15))
+          htdesc.blit(medsmlfont.render("Health",True,WHITE),(11,60))
+          htdesc.blit(smallfont2.render("30/20/15/7.5%",True,WHITE),(12,90))
           pygame.draw.circle(htdesc,RED,(60,140),30)
           pygame.draw.circle(htdesc,PINK,(60,140),20)
           pygame.draw.circle(htdesc,RED,(60,140),10)
-          htdesc.blit(htdescsub4,(15,175))
-          htdesc.blit(htdescsub5,(2,195))
-          htdesc.blit(htdescsub6,(3,215))
+          htdesc.blit(smallfont.render("Health +1",True,WHITE),(15,175))
+          htdesc.blit(smallfont.render("(can't be on",True,WHITE),(2,195))
+          htdesc.blit(smallfont2.render("purple primary)",True,WHITE),(3,215))
           pygame.draw.line(htdesc,BLACK,(119,0),(119,250))
         #damage
         if True:
           dtdesc = pygame.Surface([120,270],pygame.SRCALPHA)
-          dtdescsub1 = medsmlfont.render("Light",True,LILAC)
-          dtdescsub1_2 = medsmlfont.render("Purple",True,LILAC)
-          dtdescsub2 = medsmlfont.render("Damage",True,WHITE)
-          dtdescsub3 = smallfont2.render("2/5/10/20%",True,WHITE)
-          dtdescsub4 = smallfont.render("Health -1",True,WHITE)
-          dtdescsub5 = smallfont.render("(must be on",True,WHITE)
-          dtdescsub6 = smallfont2.render("purple primary)",True,WHITE)
           dtdesc.fill(INVIS)
-          dtdesc.blit(dtdescsub1,(22,0))
-          dtdesc.blit(dtdescsub1_2,(11,30))
-          dtdesc.blit(dtdescsub2,(0,60))
-          dtdesc.blit(dtdescsub3,(22,90))
+          dtdesc.blit(medsmlfont.render("Light",True,LILAC),(22,0))
+          dtdesc.blit(medsmlfont.render("Purple",True,LILAC),(11,30))
+          dtdesc.blit(medsmlfont.render("Damage",True,WHITE),(0,60))
+          dtdesc.blit(smallfont2.render("2/5/10/20%",True,WHITE),(22,90))
           pygame.draw.circle(dtdesc,PURPLE,(60,140),30)
           pygame.draw.circle(dtdesc,LILAC,(60,140),20)
           pygame.draw.circle(dtdesc,PURPLE,(60,140),10)
-          dtdesc.blit(dtdescsub4,(15,175))
-          dtdesc.blit(dtdescsub5,(2,195))
-          dtdesc.blit(dtdescsub6,(3,215))
+          dtdesc.blit(smallfont.render("Health -1",True,WHITE),(15,175))
+          dtdesc.blit(smallfont.render("(must be on",True,WHITE),(2,195))
+          dtdesc.blit(smallfont2.render("purple primary)",True,WHITE),(3,215))
           pygame.draw.line(dtdesc,BLACK,(119,0),(119,250))
         #missle
         if True:
           mtdesc = pygame.Surface([120,250],pygame.SRCALPHA)
-          mtdescsub1 = medsmlfont.render("Light",True,LIGHTGRAY)
-          mtdescsub1_2 = medsmlfont.render("Gray",True,LIGHTGRAY)
-          mtdescsub2 = medsmlfont.render("Missile",True,WHITE)
-          mtdescsub3 = smallfont2.render("25/15/10/5%",True,WHITE)
-          mtdescsub4 = smallfont.render("Missile",True,WHITE)
-          mtdescsub5 = smallfont.render("count +",True,WHITE)
-          mtdescsub6 = smallfont.render("refill rate",True,WHITE)
           mtdesc.fill(INVIS)
-          mtdesc.blit(mtdescsub1,(22,0))
-          mtdesc.blit(mtdescsub1_2,(25,30))
-          mtdesc.blit(mtdescsub2,(6,60))
-          mtdesc.blit(mtdescsub3,(17,90))
+          mtdesc.blit(medsmlfont.render("Light",True,LIGHTGRAY),(22,0))
+          mtdesc.blit(medsmlfont.render("Gray",True,LIGHTGRAY),(25,30))
+          mtdesc.blit(medsmlfont.render("Missile",True,WHITE),(6,60))
+          mtdesc.blit(smallfont2.render("25/15/10/5%",True,WHITE),(17,90))
           pygame.draw.circle(mtdesc,RED,(60,140),30)
           pygame.draw.circle(mtdesc,LIGHTGRAY,(60,140),20)
           pygame.draw.circle(mtdesc,RED,(60,140),10)
-          mtdesc.blit(mtdescsub4,(22,175))
-          mtdesc.blit(mtdescsub5,(22,195))
-          mtdesc.blit(mtdescsub6,(15,215))
+          mtdesc.blit(smallfont.render("Missile",True,WHITE),(22,175))
+          mtdesc.blit(smallfont.render("count +",True,WHITE),(22,195))
+          mtdesc.blit(smallfont.render("refill rate",True,WHITE),(15,215))
           pygame.draw.line(mtdesc,BLACK,(119,0),(119,250))
         #missle2
         if True:
           m2tdesc = pygame.Surface([120,250],pygame.SRCALPHA)
-          m2tdescsub1 = medsmlfont.render("Gray",True,GRAY)
-          m2tdescsub2 = medsmlfont.render("Missile2",True,WHITE)
-          m2tdescsub3 = smallfont2.render("5/2/1/0.5%",True,WHITE)
-          m2tdescsub4 = smallfont.render("Missile",True,WHITE)
-          m2tdescsub5 = smallfont.render("Refill Rate",True,WHITE)
-          m2tdescsub6 = smallfont.render("+1",True,WHITE)
           m2tdesc.fill(INVIS)
-          m2tdesc.blit(m2tdescsub1,(25,15))
-          m2tdesc.blit(m2tdescsub2,(0,60))
-          m2tdesc.blit(m2tdescsub3,(25,90))
+          m2tdesc.blit(medsmlfont.render("Gray",True,GRAY),(25,15))
+          m2tdesc.blit(medsmlfont.render("Missile2",True,WHITE),(0,60))
+          m2tdesc.blit(smallfont2.render("5/2/1/0.5%",True,WHITE),(25,90))
           pygame.draw.circle(m2tdesc,RED,(60,140),30)
           pygame.draw.circle(m2tdesc,GRAY,(60,140),20)
           pygame.draw.circle(m2tdesc,RED,(60,140),10)
-          m2tdesc.blit(m2tdescsub4,(22,175))
-          m2tdesc.blit(m2tdescsub5,(10,195))
-          m2tdesc.blit(m2tdescsub6,(50,215))
+          m2tdesc.blit(smallfont.render("Missile",True,WHITE),(22,175))
+          m2tdesc.blit(smallfont.render("Refill Rate",True,WHITE),(10,195))
+          m2tdesc.blit(smallfont.render("+1",True,WHITE),(50,215))
           pygame.draw.line(m2tdesc,BLACK,(119,0),(119,250))
         #none
         if True:
           ntdesc = pygame.Surface([120,250],pygame.SRCALPHA)
-          ntdescsub1 = medsmlfont.render("White",True,WHITE)
-          ntdescsub2 = medsmlfont.render("None",True,WHITE)
-          ntdescsub3 = smallfont2.render("38/58/64/67%",True,WHITE)
-          ntdescsub4 = smallfont.render("No added",True,WHITE)
-          ntdescsub5 = smallfont.render("effects",True,WHITE)
           ntdesc.fill(INVIS)
-          ntdesc.blit(ntdescsub1,(18,15))
-          ntdesc.blit(ntdescsub2,(23,60))
-          ntdesc.blit(ntdescsub3,(15,90))
+          ntdesc.blit(medsmlfont.render("White",True,WHITE),(18,15))
+          ntdesc.blit(medsmlfont.render("None",True,WHITE),(23,60))
+          ntdesc.blit(smallfont2.render("38/58/64/67%",True,WHITE),(15,90))
           pygame.draw.circle(ntdesc,RED,(60,140),30)
           pygame.draw.circle(ntdesc,WHITE,(60,140),20)
           pygame.draw.circle(ntdesc,RED,(60,140),10)
-          ntdesc.blit(ntdescsub4,(15,175))
-          ntdesc.blit(ntdescsub5,(30,195))
+          ntdesc.blit(smallfont.render("No added",True,WHITE),(15,175))
+          ntdesc.blit(smallfont.render("effects",True,WHITE),(30,195))
+        if True:
+          keysurf1 = pygame.Surface([600,400],pygame.SRCALPHA)
+          keysurf1.fill(INVIS)
+          keysurf1.blit(keytxt,(190,5))
+          keysurf1.blit(medsmlfont.render("Primary Color",True,WHITE),(205,50))
+          keysurf1.blit(rtdesc,(0,80))
+          keysurf1.blit(ptdesc,(100,80))
+          keysurf1.blit(otdesc,(200,80))
+          keysurf1.blit(gtdesc,(300,80))
+          keysurf1.blit(btdesc,(400,80))
+          keysurf1.blit(ytdesc,(500,80))
+          keysurf1 = pygame.transform.scale(keysurf1,size)
+        if True:
+          keysurf2 = pygame.Surface([600,400],pygame.SRCALPHA)
+          keysurf2.fill(INVIS)
+          keysurf2.blit(keytxt,(190,5))
+          keysurf2.blit(medsmlfont.render("Secondary Color",True,WHITE),(185,50))
+          keysurf2.blit(htdesc,(0,80))
+          keysurf2.blit(dtdesc,(120,80))
+          keysurf2.blit(mtdesc,(240,80))
+          keysurf2.blit(m2tdesc,(360,80))
+          keysurf2.blit(ntdesc,(480,80))
+          keysurf2 = pygame.transform.scale(keysurf2,size)
       #weapons
       if True:
         weapsurf = pygame.Surface([600,400],pygame.SRCALPHA)
-        weaptxt = medfont.render("Weapons",True,WHITE)
         #gun
         if True:
-          gunsurf = pygame.Surface([600,55],pygame.SRCALPHA)
+          gunsurf = pygame.Surface([900,55],pygame.SRCALPHA)
           gunsurf.fill(INVIS)
           pygame.draw.lines(gunsurf,BLACK,False,[(25,38),(25,18),(53,18)],9)
-          gunsub1 = medsmlfont.render("Gun",True,WHITE)
-          gunsub2 = smallfont.render("Fires bullets. Fast fire rate. Button: 1",True,WHITE)
-          gunsurf.blit(gunsub1,(80,5))
-          gunsurf.blit(gunsub2,(80,33))
+          gunsurf.blit(medsmlfont.render("Gun",True,WHITE),(80,5))
+          gunsurf.blit(smallfont.render("Fires bullets. Fast fire rate. Button: 1",True,WHITE),(80,33))
         #missile launcher
         if True:
-          mslnsurf = pygame.Surface([600,55],pygame.SRCALPHA)
+          mslnsurf = pygame.Surface([900,55],pygame.SRCALPHA)
           mslnsurf.fill(INVIS)
           pygame.draw.polygon(mslnsurf,BLACK,[(6,26),(26,24),(28,20),(66,18),(66,42),(28,40),(26,36),(6,34)])
-          mslnsub1 = medsmlfont.render("Missile Launcher",True,WHITE)
-          mslnsub2 = smallfont.render("Fires missiles. Slow fire rate. Button: 2",True,WHITE)
-          mslnsurf.blit(mslnsub1,(80,5))
-          mslnsurf.blit(mslnsub2,(80,33))
+          mslnsurf.blit(medsmlfont.render("Missile Launcher",True,WHITE),(80,5))
+          mslnsurf.blit(smallfont.render("Fires missiles. Slow fire rate. Button: 2",True,WHITE),(80,33))
         #bullets
         if True:
-          bltsurf = pygame.Surface([600,55],pygame.SRCALPHA)
+          bltsurf = pygame.Surface([900,55],pygame.SRCALPHA)
           bltssurf = pygame.Surface([80,55],pygame.SRCALPHA)
           bltsurf.fill(INVIS)
-          bltsub1 = medsmlfont.render("Bullets",True,WHITE)
-          bltsub2 = smallfont.render("Unlimited. Low speed. Cannot go through walls.",True,WHITE)
         #missiles
         if True:
-          mslssurf = pygame.Surface([600,55],pygame.SRCALPHA)
+          mslssurf = pygame.Surface([900,55],pygame.SRCALPHA)
           mslssurf.fill(INVIS)
           pygame.draw.rect(mslssurf,GRAY,[35-24,25-8,49,17])
           pygame.draw.polygon(mslssurf,RED,[(35+25,25-8),(35+25,25+8),(35+24+(10*math.sqrt(3)),25)])
           pygame.draw.polygon(mslssurf,RED,[(35-24,25-9),(35-8,25-9),(35-20,25-17),(35-32,25-17)])
           pygame.draw.polygon(mslssurf,RED,[(35-24,25+9),(35-8,25+9),(35-20,25+17),(35-32,25+17)])
-          mslssub1 = medsmlfont.render("Missile",True,WHITE)
-          mslssub2 = smallfont.render("Limited supply. High speed. Will destroy walls.",True,WHITE)
-          mslssurf.blit(mslssub1,(80,5))
-          mslssurf.blit(mslssub2,(80,33))
-        stinsurf1 = smallfont.render("Orange targets increase gun fire rate by 1 bullet per second,",True,WHITE)
-        stinsurf2 = smallfont.render("bullet movement speed by 6 p/s, missile movement speed",True,WHITE)
-        stinsurf3 = smallfont.render("by 12 p/s, and missile fire rate by 0.1 missles per second.",True,WHITE)
-      #help screen
+          mslssurf.blit(medsmlfont.render("Missile",True,WHITE),(80,5))
+          mslssurf.blit(smallfont.render("Limited supply. High speed. Will destroy walls.",True,WHITE),(80,33))
+      #help screen page 1
       if True:
-        hsubsurf1 = smallfont.render("Shoot the targets. Use WASD to move and the arrow keys to",True,WHITE)
-        hsubsurf2 = smallfont.render("aim. Fire with Enter or the Spacebar. Use Shift to go fast and",True,WHITE)
-        hsubsurf3 = smallfont.render("Ctrl to go slow. Q locks you in fast. Press Esc to pause/",True,WHITE)
-        hsubsurf4 = smallfont.render("unpause. Press E to see your stats. Use the number keys to",True,WHITE)
-        hsubsurf5 = smallfont.render("switch between weapons. 1 is gun, 2 is missile launcher.",True,WHITE)
-        hsubsurf6 = smallfont.render("Get 150/250/500/1000 points to win.",True,WHITE)
-        hsurf = pygame.Surface((600,200),pygame.SRCALPHA)
-        hsurf.fill(INVIS)
-        hsurf.blit(hsubsurf1,(10,0))
-        hsurf.blit(hsubsurf2,(5,25))
-        hsurf.blit(hsubsurf3,(30,50))
-        hsurf.blit(hsubsurf4,(10,75))
-        hsurf.blit(hsubsurf5,(20,100))
-        hsurf.blit(hsubsurf6,(125,125))
+        hsurf = pygame.Surface((600,400),pygame.SRCALPHA)
+        hsubsurf = pygame.Surface((600,200),pygame.SRCALPHA)
+        hsubsurf.fill(INVIS)
+        hsubsurf.blit(smallfont.render("Shoot the targets. Use WASD to move and the arrow keys to",True,WHITE),(10,0))
+        hsubsurf.blit(smallfont.render("aim. Fire with Enter or the Spacebar. Use Shift to go fast and",True,WHITE),(5,25))
+        hsubsurf.blit(smallfont.render("Ctrl to go slow. Q locks you in fast. Press Esc to pause/",True,WHITE),(30,50))
+        hsubsurf.blit(smallfont.render("unpause. Press E to see your stats. Use the number keys to",True,WHITE),(10,75))
+        hsubsurf.blit(smallfont.render("switch between weapons. 1 is gun, 2 is missile launcher.",True,WHITE),(20,100))
+        hsubsurf.blit(smallfont.render("Get 150/250/500/1000 points to win.",True,WHITE),(125,125))
+        hsurf.blit(medfont.render("Instructions",True,WHITE),(175,5))
+        hsurf.blit(hsubsurf,(0,50))
+        hsurf.blit(medfont.render("Expressions",True,WHITE),(180,200))
+        hsurf.blit(smallfont.render("p/s: pixels per second",True,WHITE),(15,255))
+        hsurf.blit(smallfont.render("#/#/#/#: easy/normal/hard/impossible (difficulty)",True,WHITE),(15,280))
+        hsurf = pygame.transform.scale(hsurf,size)
+      #pause screen
+      if True:
+        pausesurf = pygame.Surface([600,400],pygame.SRCALPHA)
+        pauseoverlay = pygame.Surface([600,400],pygame.SRCALPHA)
+        pauseoverlay.fill([0,0,0,50])
 
 
 
@@ -564,11 +486,11 @@ while done == False:
         done = True
       if event.type == pygame.MOUSEBUTTONDOWN:
         if event.button == 1:
-          if event.pos[0] in range(230,370) and event.pos[1] in range(230,280):
+          if event.pos[0] in range(345,555) and event.pos[1] in range(330,405):
             current_screen = "difslct"
             prev_screen = "menu"
             var_reset = True
-          elif event.pos[0] in range(230,370) and event.pos[1] in range(300,350):
+          elif event.pos[0] in range(345,555) and event.pos[1] in range(420,495):
             current_screen = "help"
             prev_screen = "menu"
             page = 1
@@ -576,9 +498,9 @@ while done == False:
     if True:
       screen.fill(GREEN)
 
-      screen.blit(logo,(65,100))
-      screen.blit(playsurf,(230,230))
-      screen.blit(helpsurf,(230,300))
+      screen.blit(logo,(105,150))
+      screen.blit(playsurf,(345,330))
+      screen.blit(helpbtn,(345,420))
 
       pygame.display.flip()
   
@@ -590,45 +512,28 @@ while done == False:
         done = True
       if event.type == pygame.MOUSEBUTTONDOWN:
         if event.button == 1:
-          if event.pos[0] in range(230,370) and event.pos[1] in range(350,400):
+          if event.pos[0] in range(345,555) and event.pos[1] in range(525,600):
             current_screen = prev_screen
-          elif event.pos[0] in range(460,600) and event.pos[1] in range(350,400) and page <= 3:
+          elif event.pos[0] in range(690,900) and event.pos[1] in range(525,600) and page <= 3:
             page += 1
-          elif event.pos[0] in range(0,140) and event.pos[1] in range(350,400) and page > 1:
+          elif event.pos[0] in range(0,210) and event.pos[1] in range(525,600) and page > 1:
             page -= 1
     #screen updates
     if True:
-      screen.fill(DARKBLUE)
+      screen.fill((0,0,100))
 
-      screen.blit(tinyfont.render("P"+str(page),True,WHITE),(0,0))
-      screen.blit(backsurf,(230,350))
+      screen.blit(pygame.font.SysFont("freesansbold",20).render("P"+str(page),True,WHITE),(0,0))
+      screen.blit(backsurf,(345,525))
       if page <= 3:
-        screen.blit(nextsurf,(460,350))
+        screen.blit(nextsurf,(690,525))
       if page > 1:
-        screen.blit(prevsurf,(0,350))
+        screen.blit(prevsurf,(0,525))
       if page == 1:
-        screen.blit(instrtxt,(175,5))
-        screen.blit(hsurf,(0,50))
-        screen.blit(exprtxt,(180,200))
-        screen.blit(p_s_txt,(15,255))
-        screen.blit(divtxt,(15,280))
+        screen.blit(hsurf,(0,0))
       elif page == 2:
-        screen.blit(keytxt,(190,5))
-        screen.blit(prmtxt,(205,50))
-        screen.blit(rtdesc,(0,80))
-        screen.blit(ptdesc,(100,80))
-        screen.blit(otdesc,(200,80))
-        screen.blit(gtdesc,(300,80))
-        screen.blit(btdesc,(400,80))
-        screen.blit(ytdesc,(500,80))
+        screen.blit(keysurf1,(0,0))
       elif page == 3:
-        screen.blit(keytxt,(190,5))
-        screen.blit(scdtxt,(185,50))
-        screen.blit(htdesc,(0,80))
-        screen.blit(dtdesc,(120,80))
-        screen.blit(mtdesc,(240,80))
-        screen.blit(m2tdesc,(360,80))
-        screen.blit(ntdesc,(480,80))
+        screen.blit(keysurf2,(0,0))
       elif page == 4:
         bltssurf.fill(INVIS)
         for i in range(len(hblts)):
@@ -637,19 +542,20 @@ while done == False:
             hblts[i] -= 80
           pygame.draw.circle(bltssurf,RED,[hblts[i],25],4)
         bltsurf.fill(INVIS)
-        bltsurf.blit(bltsub1,(80,5))
-        bltsurf.blit(bltsub2,(80,33))
+        bltsurf.blit(medsmlfont.render("Bullets",True,WHITE),(80,5))
+        bltsurf.blit(smallfont.render("Unlimited. Low speed. Cannot go through walls.",True,WHITE),(80,33))
         bltsurf.blit(bltssurf,(-5,0))
         weapsurf.fill(INVIS)
-        weapsurf.blit(weaptxt,(200,0))
+        weapsurf.blit(medfont.render("Weapons",True,WHITE),(200,0))
         weapsurf.blit(gunsurf,(0,50))
         weapsurf.blit(mslnsurf,(0,100))
         weapsurf.blit(bltsurf,(0,165))
         weapsurf.blit(mslssurf,(0,215))
-        weapsurf.blit(stinsurf1,(10,280))
-        weapsurf.blit(stinsurf2,(10,300))
-        weapsurf.blit(stinsurf3,(10,320))
-        screen.blit(weapsurf,(0,0))
+        weapsurf.blit(smallfont.render("Orange targets increase gun fire rate by 1 bullet per second,",True,WHITE),(10,280))
+        weapsurf.blit(smallfont.render("bullet movement speed by 6 p/s, missile movement speed",True,WHITE),(10,300))
+        weapsurf.blit(smallfont.render("by 12 p/s, and missile fire rate by 0.1 missles per second.",True,WHITE),(10,320))
+        weapsurft = pygame.transform.scale(weapsurf,size)
+        screen.blit(weapsurft,(0,0))
 
       pygame.display.flip()
   
@@ -661,34 +567,34 @@ while done == False:
         done = True
       if event.type == pygame.MOUSEBUTTONDOWN:
         if event.button == 1:
-          if event.pos[0] in range(200,400) and event.pos[1] in range(60,110):
+          if event.pos[0] in range(350,550) and event.pos[1] in range(60,110):
             dif = "easy"
             ptrq = 150
             current_screen = "game"
-          elif event.pos[0] in range(200,400) and event.pos[1] in range(130,180):
+          elif event.pos[0] in range(350,550) and event.pos[1] in range(130,180):
             dif = "med"
             ptrq = 250
             current_screen = "game"
-          elif event.pos[0] in range(200,400) and event.pos[1] in range(200,250):
+          elif event.pos[0] in range(350,550) and event.pos[1] in range(200,250):
             dif = "hard"
             ptrq = 500
             current_screen = "game"
-          elif event.pos[0] in range(155,445) and event.pos[1] in range(270,320):
+          elif event.pos[0] in range(305,595) and event.pos[1] in range(270,320):
             dif = "impos"
             ptrq = 1000
             current_screen = "game"
-          elif event.pos[0] in range(230,370) and event.pos[1] in range(350,400):
+          elif event.pos[0] in range(345,555) and event.pos[1] in range(525,600):
             current_screen = prev_screen
     #screen updates
     if True:
       screen.fill(GREEN)
 
-      screen.blit(diftxt,(90,5))
-      screen.blit(easysurf,(200,60))
-      screen.blit(medsurf,(200,130))
-      screen.blit(hardsurf,(200,200))
-      screen.blit(impossurf,(155,270))
-      screen.blit(backsurf,(230,350))
+      screen.blit(pygame.font.SysFont("freesansbold",80).render("Select Difficulty",True,BLACK),(240,5))
+      screen.blit(easysurf,(350,60))
+      screen.blit(medsurf,(350,130))
+      screen.blit(hardsurf,(350,200))
+      screen.blit(impossurf,(305,270))
+      screen.blit(backsurf,(345,525))
 
       pygame.display.flip()
 
@@ -704,10 +610,10 @@ while done == False:
       if event.type == pygame.MOUSEBUTTONDOWN:
         if event.button == 1:
           if paused == 1:
-            if event.pos[0] in range(230,370) and event.pos[1] in range(210,260):
+            if event.pos[0] in range(345,555) and event.pos[1] in range(315,390):
               current_screen = "menu"
               var_reset = True
-            elif event.pos[0] in range(230,370) and event.pos[1] in range(280,330):
+            elif event.pos[0] in range(345,555) and event.pos[1] in range(420,495):
               current_screen = "help"
               prev_screen = "game"
               page = 1
@@ -757,8 +663,10 @@ while done == False:
               if event.key == pygame.K_v:
                 blt_mspd -= 3
                 blt_fspd -= 10
+                msl_mspd -= 6
+                msl_fspd -= 1
               if event.key == pygame.K_i:
-                score += ptrq
+                score = ptrq
               if event.key == pygame.K_j:
                 count += 25
               if event.key == pygame.K_u:
@@ -857,23 +765,6 @@ while done == False:
       if s_lock == 1:
         move_speed *= 2
       atick = round(clock.get_fps(),1)
-      scorestat = smallfont.render("Points: "+str(score),True,BLACK)
-      mslstat = smallfont.render("Missiles: "+str(msl),True,BLACK)
-      spdstat = smallfont.render("Speed: "+str(round(move_speed*TICK))+"p/s",True,BLACK)
-      if s_lock == 1:
-        slckstat = smallfont.render("Speed lock: On",True,BLACK)
-      elif s_lock == -1:
-        slckstat = smallfont.render("Speed lock: Off",True,BLACK)
-      bmsstat = smallfont.render("Bullet movement speed: "+str(round(blt_mspd*TICK))+"p/s",True,BLACK)
-      bfsstat = smallfont.render("Bullet fire rate: "+str(blt_fspd*(TICK/60))+"/s",True,BLACK)
-      mmsstat = smallfont.render("Missile movement speed: "+str(round(msl_mspd*TICK))+"p/s",True,BLACK)
-      mfsstat = smallfont.render("Missile fire rate: "+str(round(msl_fspd,1)*(TICK/60))+"/s",True,BLACK)
-      mrfstat = smallfont.render("Missile refill rate: "+str(msl_rf),True,BLACK)
-      countstat = smallfont.render("Targets until next wall: "+str(5-count),True,BLACK)
-      targstat = smallfont.render("Current target types: "+t_type+","+t_type2,True,BLACK)
-      tartmstat = smallfont.render("Time left for target: "+str(round(((targ_timer_end*TICK)-targ_timer)/TICK,1))+"s",True,BLACK)
-      mfpsstat = smallfont.render("Optimal framerate: "+str(TICK)+"fps",True,BLACK)
-      afpsstat = smallfont.render("Current framerate: "+str(atick)+"("+str(round((atick/TICK)*100,1))+"%)fps",True,BLACK)
       if dif == "med":
         difstat = smallfont.render("Difficulty: normal",True,BLACK)
       elif dif == "impos":
@@ -886,33 +777,36 @@ while done == False:
       if True:
         statsurf.fill(INVIS)
         statsurf.set_alpha(150)
-        statsurf.blit(spdstat,(454,0))
-        statsurf.blit(slckstat,(408,20))
-        statsurf.blit(bmsstat,(284,40))
-        statsurf.blit(bfsstat,(375,60))
-        statsurf.blit(mmsstat,(271,80))
-        statsurf.blit(mfsstat,(362,100))
-        statsurf.blit(mrfstat,(349,120))
-        statsurf.blit(countstat,(297,140))
+        statsurf.blit(smallfont.render("Speed: "+str(round(move_speed*TICK))+"p/s",True,BLACK),(754,20))
+        if s_lock == 1:
+          statsurf.blit(smallfont.render("Speed lock: On",True,BLACK),(708,40))
+        elif s_lock == -1:
+          statsurf.blit(smallfont.render("Speed lock: Off",True,BLACK),(708,40))
+        statsurf.blit(smallfont.render("Bullet movement speed: "+str(round(blt_mspd*TICK))+"p/s",True,BLACK),(5,120))
+        statsurf.blit(smallfont.render("Bullet fire rate: "+str(blt_fspd*(TICK/60))+"/s",True,BLACK),(5,100))
+        statsurf.blit(smallfont.render("Missile movement speed: "+str(round(msl_mspd*TICK))+"p/s",True,BLACK),(5,80))
+        statsurf.blit(smallfont.render("Missile fire rate: "+str(round(msl_fspd,1)*(TICK/60))+"/s",True,BLACK),(5,60))
+        statsurf.blit(smallfont.render("Missile refill rate: "+str(msl_rf),True,BLACK),(5,40))
+        statsurf.blit(smallfont.render("Targets until next wall: "+str(5-count),True,BLACK),(5,575-hlth_offset))
         if dif == "impos":
-          statsurf.blit(difstat,(388,160))
+          statsurf.blit(difstat,(688,0))
         else:
-          statsurf.blit(difstat,(423,160))
-        statsurf.blit(tartmstat,(332,180))
+          statsurf.blit(difstat,(723,0))
+        statsurf.blit(smallfont.render("Time left for target: "+str(round(((targ_timer_end*TICK)-targ_timer)/TICK,1))+"s",True,BLACK),(5,555-hlth_offset))
         if t_type2 == "Light Purple":
-          statsurf.blit(targstat,(195,200)) 
+          statsurf.blit(smallfont.render("Current target types: "+t_type+","+t_type2,True,BLACK),(5,535-hlth_offset)) 
         elif t_type2 == "Light Gray":
-          statsurf.blit(targstat,(215,200))
+          statsurf.blit(smallfont.render("Current target types: "+t_type+","+t_type2,True,BLACK),(5,535-hlth_offset))
         else:
-          statsurf.blit(targstat,(247,200))
-        statsurf.blit(mfpsstat,(332,355-hlth_offset))
-        statsurf.blit(afpsstat,(260,375-hlth_offset))
+          statsurf.blit(smallfont.render("Current target types: "+t_type+","+t_type2,True,BLACK),(5,535-hlth_offset))
+        statsurf.blit(smallfont.render("Optimal framerate: "+str(TICK)+"fps",True,BLACK),(632,555-hlth_offset))
+        statsurf.blit(smallfont.render("Current framerate: "+str(atick)+"("+str(round((atick/TICK)*100,1))+"%)fps",True,BLACK),(560,575-hlth_offset))
       #hud
       if True:
-        hud.set_alpha(230)
+        hud.set_alpha(200)
         hud.fill(INVIS)
         #health
-        hlth_offset = 30*((max_hlth//17)+1)
+        hlth_offset = 30*(((max_hlth-1)//25)+1)
         h_ox = 5
         h_oy = 0
         for i in range(max_hlth):
@@ -920,7 +814,7 @@ while done == False:
           pygame.draw.arc(hud,GRAY,[h_ox,3.5+h_oy,16,18],0,pi,50)
           pygame.draw.arc(hud,GRAY,[h_ox+15,3.5+h_oy,16,18],0,pi,50)
           h_ox += 35
-          if h_ox > 595:
+          if h_ox > 875:
             h_ox = 5
             h_oy += 30
         h_ox = 5
@@ -930,16 +824,16 @@ while done == False:
           pygame.draw.arc(hud,RED,[h_ox,3.5+h_oy,16,18],0,pi,50)
           pygame.draw.arc(hud,RED,[h_ox+15,3.5+h_oy,16,18],0,pi,50)
           h_ox += 35
-          if h_ox > 595:
+          if h_ox > 875:
             h_ox = 5
             h_oy += 30
-        hud.blit(scorestat,(5,hlth_offset))
-        hud.blit(mslstat,(5,hlth_offset+20))
+        hud.blit(smallfont.render("Points: "+str(score),True,BLACK),(5,hlth_offset))
+        hud.blit(smallfont.render("Missiles: "+str(msl),True,BLACK),(5,hlth_offset+20))
         #stats
         if show_stats == 1:
           hud.blit(statsurf,(0,hlth_offset))
         elif show_stats == -1:
-          hud.blit(stattxt,(380,hlth_offset))
+          hud.blit(stattxt,(680,hlth_offset))
 
     #movement
     if True:
@@ -947,11 +841,11 @@ while done == False:
       if True:
         if y < 12:
           move_up = "no"
-        if y > 365:
+        if y > 565:
           move_down = "no"
         if x < 10:
           move_left = "no"
-        if x > 590:
+        if x > 890:
           move_right = "no"
       #movement
       if True:
@@ -977,7 +871,7 @@ while done == False:
           pygame.draw.arc(screen,WHITE,[h_ox,3.5+h_oy,16,18],0,pi,50)
           pygame.draw.arc(screen,WHITE,[h_ox+15,3.5+h_oy,16,18],0,pi,50)
           h_ox += 35
-          if h_ox > 595:
+          if h_ox > 875:
             h_ox = 5
             h_oy += 30
 
@@ -1156,8 +1050,8 @@ while done == False:
         if reset == True:
           r = random.randint(0,100)
           r2 = random.randint(0,1000)
-          t_x = random.randrange(15,585)
-          t_y = random.randrange(15,380)
+          t_x = random.randrange(15,885)
+          t_y = random.randrange(15,580)
           reset = False
         #timers
         if paused != 1:
@@ -1251,7 +1145,7 @@ while done == False:
           if paused != 1:
             blts[i][0]+=blts[i][2]
             blts[i][1]+=blts[i][3]
-          if blts[i][0] < 0 or blts[i][0] > 600:
+          if blts[i][0] < 0 or blts[i][0] > 900:
             del blts[i]
             break
           if blts[i][0] >= t_x-15 and blts[i][0] <= t_x+15 and blts[i][1] >= t_y-15 and blts[i][1] <= t_y+15:
@@ -1328,7 +1222,7 @@ while done == False:
           if paused != 1:
             msls[i][0]+=msls[i][2]
             msls[i][1]+=msls[i][3]
-          if msls[i][0] < 0 or msls[i][0] > 600:
+          if msls[i][0] < -15 or msls[i][0] > 915:
             del msls[i]
             break
           if msls[i][4] == "r":
@@ -1451,8 +1345,8 @@ while done == False:
         #values
         if count >= 5:
           count -= 5
-          wx=random.randrange(25,575)
-          wy=random.randrange(40,350)
+          wx=random.randrange(25,875)
+          wy=random.randrange(40,550)
           walls.append([wx,wy])
         #management
         for i in range(len(walls)):
@@ -1527,14 +1421,16 @@ while done == False:
 
       #pause
       if paused == 1:
-        screen.blit(pausesurf,(0,0))
         pause_timer += 1
         if pause_timer > 45:
           pause_timer = -45
+        pausesurf.fill(INVIS)
+        pausesurf.blit(pauseoverlay,(0,0))
         if pause_timer > 0:
-          screen.blit(pausetxt,(220,150))
-        screen.blit(menusurf,(230,210))
-        screen.blit(helpsurf,(230,280))
+          pausesurf.blit(medfont.render("Paused",True,WHITE),(220,150))
+        pausesurf.blit(menusurf,(230,210))
+        pausesurf.blit(helpsurf,(230,280))
+        screen.blit(pygame.transform.scale(pausesurf,size),(0,0))
 
       pygame.display.flip()
   
@@ -1546,23 +1442,23 @@ while done == False:
         done = True
       if event.type == pygame.MOUSEBUTTONDOWN:
         if event.button == 1:
-          if event.pos[0] in range(100,200) and event.pos[1] in range(275,325):
+          if event.pos[0] in range(250,350) and event.pos[1] in range(350,400):
             current_screen = "game"
             var_reset = True
-          elif event.pos[0] in range(400,500) and event.pos[1] in range(275,325):
+          elif event.pos[0] in range(550,650) and event.pos[1] in range(350,400):
             current_screen = "menu"
     if fadewhite[3] < 250 :
       fadewhite[3] += 2
     winsurf.fill(fadewhite)
     winsurf.blit(hud,(0,0))
     if dif == "impos":
-      winsurf.blit(difstat,(388,hlth_offset))
+      winsurf.blit(difstat,(688,hlth_offset))
     else:
-      winsurf.blit(difstat,(423,hlth_offset))
-    winsurf.blit(winsubsurf,(150,150))
-    winsurf.blit(resurf,(70,225))
-    winsurf.blit(yessurf,(100,275))
-    winsurf.blit(nosurf,(400,275))
+      winsurf.blit(difstat,(723,hlth_offset))
+    winsurf.blit(bigfont.render("You win!",True,YELLOW),(300,225))
+    winsurf.blit(resurf,(220,300))
+    winsurf.blit(yessurf,(250,350))
+    winsurf.blit(nosurf,(550,350))
     screen.blit(winsurf,(0,0))
     pygame.display.flip()
 
@@ -1574,10 +1470,10 @@ while done == False:
         done = True
       if event.type == pygame.MOUSEBUTTONDOWN:
         if event.button == 1:
-          if event.pos[0] in range(100,200) and event.pos[1] in range(275,325):
+          if event.pos[0] in range(250,350) and event.pos[1] in range(350,400):
             current_screen = "game"
             var_reset = True
-          elif event.pos[0] in range(400,500) and event.pos[1] in range(275,325):
+          elif event.pos[0] in range(550,650) and event.pos[1] in range(350,400):
             current_screen = "menu"
     if fadeblack[3] < 250 :
       fadeblack[3] += 5
@@ -1585,19 +1481,19 @@ while done == False:
     gmovsurf.fill(fadeblack)
     gmovsurf.blit(hud,(0,0))
     if dif == "impos":
-      gmovsurf.blit(difstat,(388,hlth_offset))
+      gmovsurf.blit(difstat,(688,hlth_offset))
     else:
-      gmovsurf.blit(difstat,(423,hlth_offset))
-    gmovsurf.blit(gmovsubsurf,(100,150))
-    gmovsurf.blit(resurf,(70,225))
-    gmovsurf.blit(yessurf,(100,275))
-    gmovsurf.blit(nosurf,(400,275))
+      gmovsurf.blit(difstat,(723,hlth_offset))
+    gmovsurf.blit(bigfont.render("Game Over",True,RED),(250,225))
+    gmovsurf.blit(resurf,(220,300))
+    gmovsurf.blit(yessurf,(250,350))
+    gmovsurf.blit(nosurf,(550,350))
     screen.blit(gmovsurf,(0,0))
     pygame.display.flip()
 
   if var_reset == True:
-    x = 300
-    y = 200
+    x = 450
+    y = 300
     move_up = "no"
     move_down = "no"
     move_right = "no"
@@ -1629,8 +1525,8 @@ while done == False:
     collide = False
     r = random.randint(0,100)
     r2 = random.randint(0,1000)
-    t_x = random.randrange(15,585)
-    t_y = random.randrange(15,385)
+    t_x = random.randrange(15,885)
+    t_y = random.randrange(15,585)
     targ_timer = 0
     o_p = False
     p_p = False
