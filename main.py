@@ -113,7 +113,6 @@ if True:
         pygame.draw.circle(icon,WHITE,(15,15),10)
         pygame.draw.circle(icon,RED,(15,15),5)
         pygame.display.set_icon(icon)
-      flags = pygame.SRCALPHA|pygame.RESIZABLE|pygame.SCALED
       size = [900,600]
       display = pygame.display.set_mode(size,pygame.SRCALPHA|pygame.RESIZABLE|pygame.SCALED)
       screen = pygame.Surface(size,pygame.SRCALPHA)
@@ -240,7 +239,7 @@ if True:
           pygame.draw.circle(rtdesc,RED,(50,85),10)
           rtdesc.blit(smallfont.render("Points: 2",True,WHITE),(5,120))
           rtdesc.blit(smallfont.render("Time:",True,WHITE),(20,140))
-          rtdesc.blit(smallfont2.render("45/30/20/5s",True,WHITE),(10,160))
+          rtdesc.blit(smallfont2.render("45/30/15/5s",True,WHITE),(10,160))
           rtdesc.blit(spctxt,(10,175))
           rtdesc.blit(smallfont.render("None",True,WHITE),(25,195))
           pygame.draw.line(rtdesc,BLACK,(99,0),(99,250))
@@ -270,7 +269,7 @@ if True:
           pygame.draw.circle(otdesc,ORANGE,(50,85),10)
           otdesc.blit(smallfont.render("Points: 1",True,WHITE),(5,120))
           otdesc.blit(smallfont.render("Time:",True,WHITE),(20,140))
-          otdesc.blit(smallfont2.render("12/8.5/5/2.5s",True,WHITE),(7,160))
+          otdesc.blit(smallfont2.render("12/8.5/5/3.5s",True,WHITE),(7,160))
           otdesc.blit(spctxt,(10,175))
           otdesc.blit(smallfont.render("Weapons",True,WHITE),(5,195))
           otdesc.blit(smallfont.render("(see P4)",True,WHITE),(10,215))
@@ -286,7 +285,7 @@ if True:
           pygame.draw.circle(gtdesc,DARKGREEN,(50,85),10)
           gtdesc.blit(smallfont.render("Points: 1",True,WHITE),(5,120))
           gtdesc.blit(smallfont.render("Time:",True,WHITE),(20,140))
-          gtdesc.blit(smallfont2.render("12/8.5/5/2.5s",True,WHITE),(7,160))
+          gtdesc.blit(smallfont2.render("12/8.5/5/3.5s",True,WHITE),(7,160))
           gtdesc.blit(spctxt,(10,175))
           gtdesc.blit(smallfont.render("Speed",True,WHITE),(17,195))
           gtdesc.blit(smallfont.render("+6 (p/s)",True,WHITE),(11,215))
@@ -317,7 +316,7 @@ if True:
           pygame.draw.circle(ytdesc,YELLOW,(50,85),10)
           ytdesc.blit(smallfont.render("Points: 10",True,WHITE),(1,120))
           ytdesc.blit(smallfont.render("Time:",True,WHITE),(20,140))
-          ytdesc.blit(smallfont2.render("7/3.5/2.5/1.5s",True,WHITE),(1,160))
+          ytdesc.blit(smallfont2.render("7/4/3/2.5s",True,WHITE),(16,160))
           ytdesc.blit(spctxt,(10,175))
           ytdesc.blit(smallfont.render("+1 Health",True,WHITE),(3,195))
           ytdesc.blit(smallfont.render("and Max",True,WHITE),(10,215))
@@ -559,7 +558,7 @@ while done == False:
 
       pygame.display.flip()
   
-  #difficulty
+  #difficulty selection
   if current_screen == "difslct":
     #event management
     for event in pygame.event.get():
@@ -567,19 +566,19 @@ while done == False:
         done = True
       if event.type == pygame.MOUSEBUTTONDOWN:
         if event.button == 1:
-          if event.pos[0] in range(350,550) and event.pos[1] in range(60,110):
+          if event.pos[0] in range(300,600) and event.pos[1] in range(90,165):
             dif = "easy"
             ptrq = 150
             current_screen = "game"
-          elif event.pos[0] in range(350,550) and event.pos[1] in range(130,180):
+          elif event.pos[0] in range(300,600) and event.pos[1] in range(195,270):
             dif = "med"
             ptrq = 250
             current_screen = "game"
-          elif event.pos[0] in range(350,550) and event.pos[1] in range(200,250):
+          elif event.pos[0] in range(300,600) and event.pos[1] in range(300,375):
             dif = "hard"
             ptrq = 500
             current_screen = "game"
-          elif event.pos[0] in range(305,595) and event.pos[1] in range(270,320):
+          elif event.pos[0] in range(233,668) and event.pos[1] in range(405,480):
             dif = "impos"
             ptrq = 1000
             current_screen = "game"
@@ -589,11 +588,11 @@ while done == False:
     if True:
       screen.fill(GREEN)
 
-      screen.blit(pygame.font.SysFont("freesansbold",80).render("Select Difficulty",True,BLACK),(240,5))
-      screen.blit(easysurf,(350,60))
-      screen.blit(medsurf,(350,130))
-      screen.blit(hardsurf,(350,200))
-      screen.blit(impossurf,(305,270))
+      screen.blit(pygame.font.SysFont("freesansbold",120).render("Select Difficulty",True,BLACK),(120,5))
+      screen.blit(easysurf,(300,90))
+      screen.blit(medsurf,(300,195))
+      screen.blit(hardsurf,(300,300))
+      screen.blit(impossurf,(233,405))
       screen.blit(backsurf,(345,525))
 
       pygame.display.flip()
@@ -912,7 +911,7 @@ while done == False:
             elif dif == "med":
               targ_timer_end = 30
             elif dif == "hard":
-              targ_timer_end = 20
+              targ_timer_end = 15
             elif dif == "impos":
               targ_timer_end = 5
           #purple
@@ -940,7 +939,7 @@ while done == False:
             elif dif == "hard":
               targ_timer_end = 5
             elif dif == "impos":
-              targ_timer_end = 2.5
+              targ_timer_end = 3.5
           #green
           elif (dif == "easy" and r in range(81,91)) or (dif == "med" and r in range(83,91)) or (dif == "hard" and r in range(82,88)) or (dif == "impos" and r in range(76,79)):
             t_type = "Green"
@@ -953,7 +952,7 @@ while done == False:
             elif dif == "hard":
               targ_timer_end = 5
             elif dif == "impos":
-              targ_timer_end = 2.5
+              targ_timer_end = 3.5
           #black
           elif (dif == "easy" and r in range(91,93)) or (dif == "med" and r in range(91,96)) or (dif == "hard" and r in range(88,98)) or (dif == "impos" and r in range(79,100)):
             t_type = "Black"
@@ -975,11 +974,11 @@ while done == False:
             if dif == "easy":
               targ_timer_end = 7
             elif dif == "med":
-              targ_timer_end = 3.5
+              targ_timer_end = 4
             elif dif == "hard":
-              targ_timer_end = 2.5
+              targ_timer_end = 3
             elif dif == "impos":
-              targ_timer_end = 1.5
+              targ_timer_end = 2.5
           #health
           if t_type != "Purple" and ((dif == "easy" and r2 in range(0,354)) or (dif == "med" and r2 in range(0,268)) or (dif == "hard" and r2 in range(0,222)) or (dif == "impos" and r2 in range(0,126))):
             t_type2 = "Pink"
